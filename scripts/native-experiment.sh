@@ -29,15 +29,19 @@ MODE="${1:-test}"
 
 # ---------------------------------------------------------------------------------------------------- the checks
 fails=0
+failed() {   # shows what the server answered to the call that just failed
+    echo "FAIL  $1 ($2)"; fails=$((fails+1))
+    [ -s last.body ] && echo "      reply: $(head -c 300 last.body | tr '\n' ' ')"
+}
 check() {   # name, expected, actual
-    if [ "$2" = "$3" ]; then echo "PASS  $1"; else echo "FAIL  $1 (expected $2, got $3)"; fails=$((fails+1)); fi
+    if [ "$2" = "$3" ]; then echo "PASS  $1"; else failed "$1" "expected $2, got $3"; fi
 }
 checkok() {   # name, actual: any success code (200, 201 or 204) will do
-    case "$2" in 200|201|204) echo "PASS  $1" ;; *) echo "FAIL  $1 (got $2)"; fails=$((fails+1)) ;; esac
+    case "$2" in 200|201|204) echo "PASS  $1" ;; *) failed "$1" "got $2" ;; esac
 }
 H=(-H "X-Requested-With: FinancialDashboard" -H "Content-Type: application/json")
 AUTH=(-u "admin:$PASS_WORD")
-code() { curl -s -o /dev/null -w '%{http_code}' "$@"; }
+code() { curl -s -o last.body -w '%{http_code}' "$@"; }
 json() { python3 -c "import sys,json; print(json.load(sys.stdin)$1)" 2>/dev/null; }
 
 smoke_checks() {
@@ -47,6 +51,9 @@ smoke_checks() {
     checkok "set the password (BCrypt)" "$(code "${H[@]}" -X POST "$URL/api/auth/password" -d "{\"password\":\"$PASS_WORD\"}")"
     check "a request without the login is refused" 401 "$(code "$URL/api/accounts")"
     checkok "verify the password" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/auth/verify" -d "{\"password\":\"$PASS_WORD\"}")"
+    # an Excel file of the still empty database, read back by the import check (the import only works on an empty database)
+    checkok "Excel export of the empty database (Apache POI)" "$(curl -s -o empty.xlsx -w '%{http_code}' "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/export" -d "{\"password\":\"$PASS_WORD\"}")"
+    checkok "Excel import check of it (reads the workbook)" "$(curl -s -o last.body -w '%{http_code}' "${AUTH[@]}" -H 'X-Requested-With: FinancialDashboard' -H 'Content-Type: application/octet-stream' -X POST "$URL/api/import?apply=false" --data-binary @empty.xlsx)"
     checkok "list accounts (database, JPA)" "$(code "${AUTH[@]}" "$URL/api/accounts")"
     acc="$(curl -s "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/accounts" -d '{"name":"Bank","type":"BANK","openingBalance":1000}' | json "['id']")"
     check "create an account (write to the database)" "yes" "$([ -n "$acc" ] && echo yes)"
@@ -71,9 +78,8 @@ smoke_checks() {
     checkok "write a backup now (SQL script, zip, verify)" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/backups")"
     checkok "backup status" "$(code "${AUTH[@]}" "$URL/api/backups")"
     checkok "client log" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/client-log" -d '{"level":"INFO","event":"smoke","detail":"x"}')"
-    checkok "Excel export (Apache POI)" "$(curl -s -o export.xlsx -w '%{http_code}' "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/export" -d "{\"password\":\"$PASS_WORD\"}")"
+    checkok "Excel export with data (Apache POI)" "$(curl -s -o export.xlsx -w '%{http_code}' "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/export" -d "{\"password\":\"$PASS_WORD\"}")"
     check "the export is a real workbook (zip)" "PK" "$(head -c 2 export.xlsx 2>/dev/null)"
-    checkok "Excel import check (reads it back)" "$(curl -s -o import.json -w '%{http_code}' "${AUTH[@]}" -H 'X-Requested-With: FinancialDashboard' -H 'Content-Type: application/octet-stream' -X POST "$URL/api/import?apply=false" --data-binary @export.xlsx)"
 }
 
 start_app() {   # runs the given command in the background from a temporary folder, waits until the page answers
