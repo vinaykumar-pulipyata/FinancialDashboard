@@ -1,5 +1,6 @@
-# Continuous integration: every push and every pull request is built and tested on Linux, Windows and macOS (Apple silicon).
+# Continuous integration: every push and every pull request is tested and built once, on Linux.
 # `./gradlew build` runs the Java tests, then the JavaScript tests (task jsTest, Node's own runner), then builds the application jar.
+# The binaries for Linux, Windows and macOS are made by a separate workflow that runs only when a release tag is pushed (release.yml).
 name: CI
 
 on:
@@ -17,14 +18,9 @@ permissions:
 
 jobs:
   build:
-    name: Build and test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Test and build
+    runs-on: ubuntu-latest
     timeout-minutes: 45
-    strategy:
-      fail-fast: false          # one system failing should not hide how the others did
-      matrix:
-        # macos-15 is Apple silicon (arm64). The Intel macOS runners (macos-13, macos-15-intel) are left out on purpose.
-        os: [ubuntu-latest, windows-latest, macos-15]
 
     steps:
       - name: Check out the code
@@ -51,7 +47,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Show the tools
-        shell: bash
         run: |
           java -version
           node --version
@@ -59,14 +54,13 @@ jobs:
           ./gradlew --version
 
       - name: Build and test
-        shell: bash
         run: ./gradlew build --stacktrace
 
       - name: Keep the test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports-${{ matrix.os }}
+          name: test-reports
           path: |
             build/reports/tests/test
             build/reports/jacoco/test/html
@@ -75,7 +69,6 @@ jobs:
           retention-days: 14
 
       - name: Keep the application jar
-        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: financial-dashboard-jar
