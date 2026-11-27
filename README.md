@@ -4,7 +4,11 @@ A personal finance app for one person. Everything is counted in Indian rupees (I
 
 Built with Spring Boot 4.1.1 (Java 17), JPA on a file-based H2 database with Flyway migrations, and a plain HTML/CSS/JavaScript front end with no build step. The only thing you install yourself is **Java 17**; Gradle fetches the rest.
 
-## Quick start
+## Download (no Java needed)
+
+Each release on the [Releases page](https://github.com/vinaykumar-pulipyata/FinancialDashboard/releases) has a self-contained executable for **Linux (x64 and arm64), macOS (Apple silicon) and Windows (x64)**, each with a `.sha256` checksum file. There is no build for Intel Macs. Put the file in a folder of its own (it keeps `data/`, `backups/` and `logs/` next to where you start it) and run it, then open `http://localhost:8080/`. How to open it on each system, and checking the download: [Running the downloaded executable](docs/OPERATIONS.md#running-the-downloaded-executable). The first release (`v0.1.0`) has not been published yet.
+
+## Quick start (from the source)
 
 ```
 scripts/check-setup.sh             # says what is missing and how to install it (changes nothing)
@@ -43,7 +47,7 @@ A plain-text overview of everything is in [`docs/FEATURES.txt`](docs/FEATURES.tx
 |---|---|
 | [Setup](docs/SETUP.md) | Installing Java and the optional tools, step by step, for Mac, Windows and Linux |
 | [Operations](docs/OPERATIONS.md) | Starting, demo data, forgot the password, restoring a backup, logs, backups in detail, configuration |
-| [Development](docs/DEVELOPMENT.md) | Project layout, REST API, tests, known limits |
+| [Development](docs/DEVELOPMENT.md) | Project layout, REST API, tests, CI and releases, the native executable, known limits |
 | [Specification](docs/SPEC.md) | Every rule, the data model and a dated list of every decision |
 
 ## Tests

@@ -89,6 +89,28 @@ The backup is first loaded into a new database file next to the real one. Only i
 moved aside (as `financialdb.mv.db.before-restore-<time>`, never deleted) and the new one put in its place. A missing or
 damaged backup stops the start and changes nothing.
 
+## Running the downloaded executable
+
+A release ([Releases page](https://github.com/vinaykumar-pulipyata/FinancialDashboard/releases)) has one file per system, built with GraalVM, so it needs no Java:
+
+| File | System |
+|---|---|
+| `financial-dashboard-linux-x64` | Linux, Intel or AMD |
+| `financial-dashboard-linux-arm64` | Linux on ARM (a Raspberry Pi 4 or 5, ARM servers) |
+| `financial-dashboard-macos-arm64` | Mac with Apple silicon (M1 or newer; there is no Intel Mac build) |
+| `financial-dashboard-windows-x64.exe` | Windows, 64-bit |
+
+Each file has a `.sha256` file beside it. To check a download: `shasum -a 256 -c financial-dashboard-macos-arm64.sha256` (macOS and Linux: `sha256sum -c`), or on Windows compare `certutil -hashfile financial-dashboard-windows-x64.exe SHA256` with the file's text.
+
+1. Make a folder for it (for example `~/financial-dashboard`) and put the file there. **Start it from that folder**: like the normal version, it keeps `data/` (the database), `backups/` and `logs/` in the folder you start it from, so starting it from somewhere else begins a new, empty database.
+2. Allow it to run. The files are not signed, so each system asks once:
+   - **macOS:** `chmod +x financial-dashboard-macos-arm64` then `xattr -d com.apple.quarantine financial-dashboard-macos-arm64` (this removes the "downloaded from the internet" mark that makes macOS refuse an unsigned program). Or open it once with right-click, Open.
+   - **Linux:** `chmod +x financial-dashboard-linux-x64` (or `-arm64`).
+   - **Windows:** double-click it, and if SmartScreen says "Windows protected your PC", choose More info, then Run anyway. Or run it from a Command Prompt in the folder.
+3. Run it: `./financial-dashboard-macos-arm64` (Linux and macOS) or `financial-dashboard-windows-x64.exe` (Windows). It starts in about 4 seconds; open `http://localhost:8080/` and set a password on the first run.
+
+The same flags as the normal version work after the file name: `--reset-password`, `--restore=FILE`, `--server.port=9090` and the other [configuration](#configuration) options (as `--property=value`). The optional Caddy proxy and the `scripts/financial-dashboard.sh` launcher are for the source version; the executable needs neither. Data made by one version of the app (the source version or an executable) can be used by the other: it is the same database file, and a newer executable updates an older database by itself when it starts. Stop it with Ctrl+C in its window.
+
 ## Logs
 
 The app writes a log to the console and to files sorted by month and day:

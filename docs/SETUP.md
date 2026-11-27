@@ -4,6 +4,8 @@
 
 ## Technology and what you need installed
 
+> **Just want to run it?** You do not have to install anything: download the executable for your system from the [Releases page](https://github.com/vinaykumar-pulipyata/FinancialDashboard/releases) and follow [Running the downloaded executable](OPERATIONS.md#running-the-downloaded-executable). The rest of this page is for building and running from the source.
+
 Built with Spring Boot 4.1.1 (Spring Framework 7, Java 17), JPA on a file-based H2 database with Flyway migrations, Apache POI
 for the Excel export, and a plain HTML/CSS/JavaScript front end with no build step and no npm packages. Every library is
 downloaded by Gradle the first time, so **the only thing you install yourself is Java 17.** Node, Python and Caddy are optional extras.

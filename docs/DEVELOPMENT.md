@@ -73,6 +73,29 @@ The JavaScript tests (`src/test/js`, run by `./gradlew test` as well) load the d
 page and check the period maths, the Stats buttons, the net worth graph and its zoom, the calendar, notes and tags,
 the figures, the view switching and `api()`, and that the page is wired together: the one module that loads the rest, every import matching an export, every id defined, no markup built from data.
 
+## Continuous integration and releases
+
+Two GitHub Actions workflows in `.github/workflows/`:
+
+| Workflow | When | What it does |
+|---|---|---|
+| `ci.yml` (CI) | every push and pull request | one Linux job: sets up Java 17, Node 20 and Python 3, runs `./gradlew build` (Java tests, then the JavaScript tests, then the jar), keeps the test reports and the jar for 14 days. A newer push to the same branch cancels the older run. |
+| `release.yml` (Release) | a pushed tag starting with `v` | first the same tests in one job (`verify`); then four jobs in parallel build the native executable with GraalVM 25 and run the smoke test on it: `ubuntu-latest` (Linux x64), `ubuntu-24.04-arm` (Linux arm64), `macos-15` (Apple silicon; no Intel Mac) and `windows-latest`. Each attaches `financial-dashboard-<system>` and a `.sha256` file to a GitHub Release (generated release notes; a tag with a hyphen such as `v0.1.0-rc1` is a pre-release). One system failing does not stop the others. |
+
+To release: set `version` in `build.gradle`, commit, then `git tag v0.1.0 && git push origin v0.1.0`. Try a pre-release tag (`v0.1.0-rc1`) first.
+
+## The native executable (GraalVM)
+
+The release files are GraalVM native images of the Spring Boot app (about 190 MB, start in about 4 seconds, no Java needed). A native image can only be built on the system it is for, which is why the release workflow has a job per system.
+
+- **Build it yourself:** it needs GraalVM **25** (Spring Boot 4 writes its native metadata in the GraalVM 25 format; GraalVM 24 stops with "Missing attribute(s) [glob]"). With `JAVA_HOME` on that GraalVM: `./gradlew nativeCompile -PjavaVersion=25`. The result is `build/native/nativeCompile/FinancialDashboard`. It takes about 5 minutes and about 4 GB of memory. The normal build is unchanged and still uses Java 17 (`javaVersion` defaults to 17).
+- **Test it:** `scripts/smoke-test.sh build/native/nativeCompile/FinancialDashboard` starts it from a temporary folder on port 8099 (own database, your data is not touched), runs about 30 calls (pages, password, accounts, transactions, the encrypted diary, backups, Excel export and import) and stops it. `scripts/native-experiment.sh` builds and tests in one go (`--rebuild` builds first) and finds a GraalVM 25 in `~/Library/Java/JavaVirtualMachines` or `GRAALVM_HOME`. Run both in an ordinary terminal: Gradle and the app open local sockets.
+- **Why it needs more than Spring's own help:** a native image drops everything the program only reaches by name at run time. Three things make this app work:
+  - `config/NativeImageHints.java` (imported with `@ImportRuntimeHints`, used only when the image is built) registers Hibernate's `*_$logger` classes, which JBoss Logging finds by name.
+  - `src/main/resources/META-INF/native-image/com.learning.spring/FinancialDashboard-agent/reachability-metadata.json` is a **recording**: `scripts/native-experiment.sh --agent` runs the normal jar on GraalVM with the tracing agent, makes the smoke-test calls, and saves every class and resource used by name (Hibernate helper classes, Apache POI, security and so on). **If a new feature fails only in the native executable with a "MissingReflectionRegistrationError" or a missing resource, add a call that uses it to `scripts/smoke-test.sh` and record again.** The script takes the ByteBuddy byte-code provider out of the recording again (Hibernate 7.4 picks its provider only through the Java service lookup, and the native image must not see ByteBuddy).
+  - `build.gradle` has `-H:+AddAllCharsets` for the native build (Apache POI asks for Windows-1252).
+- **Not covered by the smoke test:** the screens in a browser, and `--restore=FILE` and `--reset-password` on the native executable. The Java tests run on the normal JVM, not on the native image.
+
 ## Limits and choices
 
 Known rough edges in the back end (some refusal messages with names reaching the log, a percent-encoded `/api` path skipping the header check, an unescaped `%` in note search, a Ledger bill date drifting after a month end, and similar) are written down in `docs/SPEC.md` section 8b.
