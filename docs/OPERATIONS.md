@@ -89,6 +89,30 @@ The backup is first loaded into a new database file next to the real one. Only i
 moved aside (as `financialdb.mv.db.before-restore-<time>`, never deleted) and the new one put in its place. A missing or
 damaged backup stops the start and changes nothing.
 
+## Installing with one command
+
+`scripts/install.sh` (macOS and Linux) and `scripts/install.ps1` (Windows) download the executable that matches the system, check its SHA-256 checksum against the one published with the release, and set up a `financial-dashboard` command. They never touch your data.
+
+```
+curl -fsSL https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.sh | sh
+```
+
+Piping a script into `sh` runs whatever it says, so read it first if you like: `curl -fsSL <the same address> -o install.sh`, look at it, then `sh install.sh`.
+
+- **What it does:** works out the system (Linux x64 or arm64, macOS on Apple silicon; a shell running under Rosetta counts as Apple silicon; an Intel Mac is refused with a pointer to the source version), downloads `financial-dashboard-<system>` and its `.sha256` from the **latest release** (a pre-release is only installed when you name it), refuses to install if the checksum differs, and puts the files in `~/.financial-dashboard/`:
+
+  | Path | What |
+  |---|---|
+  | `~/.financial-dashboard/financial-dashboard-app` | the executable |
+  | `~/.financial-dashboard/financial-dashboard` | the launcher: goes to that folder, opens the browser when the app answers, starts the app (extra options pass through) |
+  | `~/.financial-dashboard/data`, `backups`, `logs` | your data, made by the app; never replaced or deleted |
+  | `~/.local/bin/financial-dashboard` | a link to the launcher (if `~/.local/bin` is not on your PATH it says so and prints the line to add) |
+
+  An earlier Java-based install in the same folder (`app.jar`) is left alone; its old launcher is saved as `financial-dashboard.previous`, and the data is shared. Running the script again is an upgrade.
+- **Options** (after `sh -s --`): `--version v0.1.0-rc1` installs that release, `--dir DIR` uses another folder, `--dry-run` only says what it would do, `--uninstall` removes the program and the command (the data stays). The same through the environment: `FINANCIAL_DASHBOARD_VERSION`, `FINANCIAL_DASHBOARD_HOME`, `FINANCIAL_DASHBOARD_BIN_DIR`. Example: `curl -fsSL <address> | sh -s -- --version v0.1.0-rc1`.
+- **Windows:** `irm https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.ps1 | iex` installs into `%LOCALAPPDATA%\FinancialDashboard` (the executable, a `financial-dashboard.cmd` launcher and, later, `data\`) and adds that folder to your user PATH; open a new window and run `financial-dashboard`. Options are environment variables (`FINANCIAL_DASHBOARD_VERSION`, `FINANCIAL_DASHBOARD_HOME`, `FINANCIAL_DASHBOARD_DRY_RUN=1`, `FINANCIAL_DASHBOARD_UNINSTALL=1`). The PowerShell script has not been run on Windows yet.
+- **Tested:** `scripts/test-install.sh` (run by CI) installs a fake release into a temporary home: the install, an upgrade over an older install with data in it, a wrong checksum and the uninstall. The installer has not been used against a real release yet.
+
 ## Running the downloaded executable
 
 A release ([Releases page](https://github.com/vinaykumar-pulipyata/FinancialDashboard/releases)) has one file per system, built with GraalVM, so it needs no Java:
