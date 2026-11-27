@@ -12,10 +12,15 @@ import org.springframework.core.NativeDetector;
 public class FinancialDashboardApplication {
 
     public static void main(String[] args) {
+        BackupRestorer.restoreIfRequested(args);   // --restore=FILE puts a backup back before the database is opened
+        SpringApplication app = new SpringApplication(FinancialDashboardApplication.class);
         if (NativeDetector.inNativeImage()) {
-            // Hibernate's default byte-code provider (ByteBuddy) makes classes while the app runs, which a native image cannot do.
-            System.setProperty("hibernate.bytecode.provider", "none");
+            // the "native" profile (application-native.properties) tells Hibernate not to use ByteBuddy, which makes classes while the app
+            // runs and so cannot work in a native image
+            app.setAdditionalProfiles("native");
         }
+        app.run(args);
+    }
         BackupRestorer.restoreIfRequested(args);   // --restore=FILE puts a backup back before the database is opened
         SpringApplication.run(FinancialDashboardApplication.class, args);
     }

@@ -59,8 +59,11 @@ smoke_checks() {
     check "create an account (write to the database)" "yes" "$([ -n "$acc" ] && echo yes)"
     cat="$(curl -s "${AUTH[@]}" "$URL/api/categories?kind=EXPENSE" | json "[0]['id']")"
     check "categories" "yes" "$([ -n "$cat" ] && echo yes)"
-    checkok "create an expense (tags, lookups)" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/transactions" -d "{\"date\":\"2026-01-05\",\"kind\":\"EXPENSE\",\"fromAccountId\":$acc,\"amount\":250,\"categoryId\":$cat,\"note\":\"Dinner with friends\"}")"
-    checkok "create an income" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/transactions" -d "{\"date\":\"2026-01-06\",\"kind\":\"INCOME\",\"toAccountId\":$acc,\"amount\":900,\"note\":\"Salary\"}")"
+    # The bodies are built here, outside the $( ) of the checks: macOS's old bash (3.2) splits an escaped-quote JSON at its commas inside $( ).
+    body_expense="{\"date\":\"2026-01-05\",\"kind\":\"EXPENSE\",\"fromAccountId\":$acc,\"amount\":250,\"categoryId\":$cat,\"note\":\"Dinner with friends\"}"
+    body_income="{\"date\":\"2026-01-06\",\"kind\":\"INCOME\",\"toAccountId\":$acc,\"amount\":900,\"note\":\"Salary\"}"
+    checkok "create an expense (tags, lookups)" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/transactions" -d "$body_expense")"
+    checkok "create an income" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/transactions" -d "$body_income")"
     checkok "suggest tags" "$(code "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/transactions/suggest-tags" -d '{"note":"Coffee at Starbucks","description":null,"categoryId":null}')"
     checkok "list transactions" "$(code "${AUTH[@]}" "$URL/api/transactions")"
     checkok "net worth (calculations)" "$(code "${AUTH[@]}" "$URL/api/net-worth?months=12")"
