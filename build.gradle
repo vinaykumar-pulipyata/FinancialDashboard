@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+
+group = 'com.learning.spring'
+version = '0.0.1-SNAPSHOT'
+description = 'FinancialDashboard'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'   // schema migrations: src/main/resources/db/migration
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.apache.poi:poi-ooxml:5.4.1'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+jacoco {
+    toolVersion = '0.8.13'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport, jsTest   // build/reports/jacoco/test/html/index.html, then the JavaScript tests
+}
+
+tasks.named('jacocoTestReport') {
+    dependsOn tasks.named('test')
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+// The front end's tests (src/test/js) use Node's own test runner, so there is nothing to install: Node 18 or newer.
+// Without Node on the machine they are skipped with a message instead of failing the build.
+tasks.register('jsTest', Exec) {
+    group = 'verification'
+    description = 'Runs the JavaScript tests in src/test/js with node --test.'
+    commandLine 'sh', '-c', 'if command -v node >/dev/null 2>&1; then node --test src/test/js/*.test.js; else echo "Node.js not found: JavaScript tests skipped"; fi'
+}

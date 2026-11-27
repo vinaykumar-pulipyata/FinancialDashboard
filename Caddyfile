@@ -1,0 +1,21 @@
+# Optional: lets you open the dashboard as http://finance.localhost/ with no port number.
+# It lives in the project and is run from here (nothing is installed as a service and nothing outside this folder is touched):
+#     caddy run --config ./Caddyfile
+# Stop it with Ctrl+C. It needs Caddy (brew install caddy).
+# The app itself still listens on 127.0.0.1:8080 and is unchanged.
+#
+# Port 80 is only open to a normal program on macOS when it listens on all addresses, not on 127.0.0.1 alone. So Caddy
+# listens on all of them here, and the check below refuses anything that does not come from this computer.
+{
+	# plain http on this computer, so no certificates are made or stored
+	auto_https off
+	# no admin port and no saved config outside this folder
+	admin off
+}
+
+http://finance.localhost {
+	@elsewhere not remote_ip 127.0.0.1 ::1
+	respond @elsewhere "This dashboard is only for the computer it runs on." 403
+
+	reverse_proxy 127.0.0.1:8080
+}

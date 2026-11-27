@@ -1,0 +1,17 @@
+/* Flip card: the view card turns over to show another view on its back. */
+
+.flip-card { perspective: 1800px; }
+
+/* Both faces share one grid cell, so the card is as tall as the taller face while turning. */
+.flip-inner { display: grid; transform-style: preserve-3d; transition: transform .6s ease; }
+.flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+
+.flip-face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-face.back { transform: rotateY(180deg); }
+
+/* Once the turn has finished the hidden face is removed, so the card fits what is showing. */
+.flip-face.collapsed { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .flip-inner { transition: none; }
+}

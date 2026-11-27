@@ -1,0 +1,21 @@
+<div class="modal-overlay hidden" id="txnOverlay">
+    <div class="modal" id="txnModal">
+        <div class="modal-header">
+            <h2 id="txnTitle">Income</h2>
+            <button class="modal-close" id="txnClose" title="Close">&#10005;</button>
+        </div>
+        <!-- Kind of a NEW transaction: Income on the left, Expense (the default) in the middle, Transfer on the right -->
+        <div class="chips txn-kinds hidden" id="txnKinds" role="group" aria-label="Kind of transaction">
+            <button class="chip" type="button" data-kind="INCOME">+ Income</button>
+            <button class="chip" type="button" data-kind="EXPENSE">&minus; Expense</button>
+            <button class="chip" type="button" data-kind="TRANSFER">&#8644; Transfer</button>
+        </div>
+        <div class="modal-body txn-form" id="txnBody"></div>
+        <div class="modal-footer">
+            <button class="btn btn-delete hidden" id="txnDelete">Delete</button>
+            <span class="modal-error" id="txnError"></span>
+            <button class="btn btn-secondary" id="txnCancel">Cancel</button>
+            <button class="btn btn-primary" id="txnSave">Save</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<!-- NOTE: write or edit one diary note -->
+<div class="modal-overlay hidden" id="noteOverlay">
+    <div class="modal note-modal">
+        <div class="modal-header">
+            <h2 id="noteTitleHeading">New note</h2>
+            <button class="modal-close" id="noteClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="txn-field"><span>Day</span>
+                <input type="date" id="noteDate">
+            </div>
+            <div class="txn-field"><span>Folder</span>
+                <select id="noteFolderSelect"></select>
+            </div>
+            <div class="txn-field"><span>Title (optional)</span>
+                <input type="text" id="noteHeading" maxlength="200" autocomplete="off">
+            </div>
+            <div class="txn-field"><span>Tags (worked out from the note; add or remove your own)</span>
+                <div class="tag-input" id="noteTagBox">
+                    <span id="noteTagPills"></span>
+                    <input type="text" id="noteTagInput" list="noteTagList" maxlength="31" autocomplete="off" placeholder="add a tag">
+                    <button class="txn-link" id="noteTagSuggest" type="button" title="Work the tags out again from the title and the note">&#8635; Suggest</button>
+                </div>
+                <datalist id="noteTagList"></datalist>
+            </div>
+            <div class="txn-field"><span>Note</span>
+                <textarea id="noteBody" rows="10" maxlength="10000"></textarea>
+            </div>
+            <div class="note-count" id="noteCount"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-delete hidden" id="noteDelete">Delete</button>
+            <span class="modal-error" id="noteError"></span>
+            <button class="btn btn-secondary" id="noteCancel">Cancel</button>
+            <button class="btn btn-primary" id="noteSave">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- NOTE: read one note (clicking a note opens this; Edit goes to the form above) -->
+<div class="modal-overlay hidden" id="noteReadOverlay">
+    <div class="modal note-modal note-read">
+        <div class="modal-header">
+            <h2 id="noteReadTitle"></h2>
+            <button class="modal-close" id="noteReadClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body">
+            <div class="note-read-meta" id="noteReadMeta"></div>
+            <div class="note-read-text" id="noteReadText"></div>
+            <div class="note-read-tags" id="noteReadTags"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="noteReadEdit">Edit</button>
+            <button class="btn btn-primary" id="noteReadDone">Close</button>
+        </div>
+    </div>
+</div>

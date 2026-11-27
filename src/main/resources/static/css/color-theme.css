@@ -1,0 +1,16 @@
+/* The Color theme: a bright light theme with a teal accent and a mint-to-peach page, instead of the plain white and grey of
+   Light. theme.js sets data-theme="color" on <html>. It changes only the page, card, accent and border colours; the chart
+   colours, the status colours and the fills under white text stay as in base.css / charts.css, so everything that passed the
+   contrast checks still does. Must load after base.css. */
+
+:root[data-theme="color"] {
+    --bg: #e9f6f3;
+    --surface: #ffffff;
+    --muted: #4a6670;
+    --accent: #0f766e;
+    --accent-fill: #0f766e;
+    --border: rgba(15, 118, 110, 0.22);
+    --tint: rgba(15, 118, 110, 0.06);
+}
+
+:root[data-theme="color"] body { background: linear-gradient(160deg, #e3f5f1 0%, #eaf6f4 45%, #fdf0e1 100%) fixed; }

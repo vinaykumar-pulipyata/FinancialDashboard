@@ -1,0 +1,89 @@
+/* Net worth figures in the Net worth view. */
+
+.net-worth {
+    font-size: clamp(38px, 7vw, 68px);
+    font-weight: 700;
+    color: var(--accent);
+    margin: 5px 0;
+}
+
+.info-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 11px;
+    height: 11px;
+    margin-right: 4px;
+    border-radius: 50%;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    font-size: 8px;
+    line-height: 1;
+    cursor: help;
+}
+
+.info-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: -6px;
+    width: 200px;
+    background: var(--text);
+    color: var(--surface);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+    z-index: 5;
+}
+
+.info-tag:hover .info-tooltip,
+.info-tag:focus .info-tooltip {
+    opacity: 1;
+}
+
+.masked-value {
+    display: inline-block;
+    min-width: 68px;
+    text-align: left;
+}
+
+.reveal-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0.7;
+    padding: 0;
+    margin-left: 2px;
+    line-height: 1;
+    display: inline-block;
+    width: 14px;
+    text-align: center;
+}
+
+.reveal-toggle:hover {
+    opacity: 1;
+}
+
+/* On the right above the graph, as a sum: Assets, + Receivables, - Debt, then a rule and = Net worth, all in bold. */
+.nw-figures { margin-bottom: 18px; display: flex; justify-content: flex-end; }
+.nw-sum { display: grid; grid-template-columns: 22px 1fr auto; column-gap: 14px; row-gap: 6px; align-items: baseline; width: min(100%, 540px); }   /* names at the left of the box, amounts at the right */
+.nw-op { text-align: right; color: var(--muted); font-size: 19px; font-weight: 700; }
+.nw-label { text-align: left; color: var(--muted); font-size: 15px; font-weight: 700; }
+.nw-amt { text-align: right; font-size: 19px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.nw-amt.nw-debt { color: var(--red); }
+/* Receivables sits apart under the total: smaller and grey, because it is not part of the sum. */
+.nw-sum .nw-receivables { color: var(--muted); font-size: 15px; font-weight: 600; margin-top: 8px; }
+.nw-parts { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; column-gap: 14px; row-gap: 2px; margin: -2px 0 6px; padding-left: 66px; }   /* indented past the names above */
+.nw-parts.hidden { display: none; }
+.nw-part-label { text-align: left; color: var(--muted); font-size: 14px; }
+.nw-part-amt { text-align: right; font-size: 19px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }   /* same size and weight as the amounts above, so the digits line up in their columns */
+.nw-rule { grid-column: 1 / -1; border-top: 2px solid var(--text); margin: 4px 0 2px; }
+.nw-figures .net-worth { grid-column: 1 / -1; margin: 0; font-size: clamp(40px, 7vw, 64px); font-weight: 800; color: var(--accent); }

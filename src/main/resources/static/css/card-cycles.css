@@ -1,0 +1,22 @@
+/* Credit card cycles under a card's row in the Accounts view: a fold, then one block per statement cycle. */
+
+.cc-block { margin: -2px 0 10px 14px; }
+.cc-toggle { background: none; border: 0; padding: 4px 2px; color: var(--accent); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.cc-note { margin: 4px 0 6px; font-size: 12px; color: var(--muted); }
+.cc-cycle { margin-top: 6px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); overflow: hidden; }
+.cc-cycle.current { border-color: var(--accent); }
+.cc-pager { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; }
+.cc-nav { width: 30px; height: 30px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-size: 18px; line-height: 1; cursor: pointer; }
+.cc-nav:hover:not(:disabled) { border-color: var(--accent); }
+.cc-nav:disabled { opacity: .35; cursor: default; }
+.cc-dates { width: 13rem; text-align: center; white-space: nowrap; }   /* a fixed width: the ‹ › stay put */
+.cc-place { font-size: 12px; color: var(--muted); }
+.cc-status { font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; border: 1px solid var(--border); }
+.cc-status.paid { color: var(--green); }
+.cc-status.part, .cc-status.due { color: var(--yellow); }
+.cc-status.overdue { color: var(--red); border-color: var(--red); }
+.cc-status.open { color: var(--accent); }
+.cc-summary { padding: 0 12px 6px 12px; font-size: 12px; color: var(--muted); }
+.cc-part { padding: 0 12px 8px; }
+.cc-chips { margin: 4px 0 6px; }
+.cc-none { padding: 4px 0; font-size: 12px; color: var(--muted); }

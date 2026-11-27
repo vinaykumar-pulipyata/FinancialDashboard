@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logging layout: console, and files under logs/general/<year-month>/<date>.<n>.log (a new file each day, or at 10 MB: the
+     <n> counts up). Levels still come from logging.level.* in application.properties. The folder is app.log.dir, so tests can
+     point it at a temporary folder. No <file> is set on purpose: the file being written is then the dated one itself, so
+     today's log is already where you look for it. -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="LOG_DIR" source="app.log.dir" defaultValue="./logs/general"/>
+    <springProperty scope="context" name="LOG_MAX_FILE_SIZE" source="app.log.max-file-size" defaultValue="10MB"/>
+    <springProperty scope="context" name="LOG_MAX_HISTORY" source="app.log.max-history" defaultValue="30"/>
+    <springProperty scope="context" name="LOG_TOTAL_SIZE_CAP" source="app.log.total-size-cap" defaultValue="300MB"/>
+
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${FILE_LOG_CHARSET}</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM,aux}/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

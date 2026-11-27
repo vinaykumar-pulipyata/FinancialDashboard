@@ -1,0 +1,15 @@
+/* Exchange rates: the form row for a new rate, and the saved rates grouped by currency. */
+.rates-modal { max-width: 560px; }
+.rates-new { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+.rates-group { margin-top: 14px; }
+.rates-group h3 { margin: 0 0 4px; font-size: 14px; }
+.rates-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.rates-row .rates-date { flex: 1; color: var(--muted); }
+.rates-row .rates-value { font-variant-numeric: tabular-nums; }
+.rates-row .rates-delete { background: none; border: 0; cursor: pointer; color: var(--muted); }
+@media (max-width: 560px) { .rates-new { grid-template-columns: 1fr; } }
+
+/* The note under a rupee-only view while a transaction in a foreign currency exists (shown by renderForeignNotes). */
+.foreign-note { margin: 6px 0; font-size: 12px; color: var(--muted); }
+/* The amount that arrived on a transfer between two currencies, under the amount in the list. */
+.txn-row .amt .received { font-size: 12px; color: var(--muted); font-weight: 400; }

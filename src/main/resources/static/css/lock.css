@@ -1,0 +1,3 @@
+/* Screen lock: an opaque cover over everything, so no figures show through. */
+
+.lock-screen { background: var(--bg); z-index: 200; }

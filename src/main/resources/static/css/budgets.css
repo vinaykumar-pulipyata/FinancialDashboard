@@ -1,0 +1,28 @@
+/* Budgets view: a month with ‹ ›, then one card for the limit on all spending and one row per category limit, each with a bar. */
+
+.bg-tools { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.bg-nav { display: flex; align-items: center; gap: 10px; }
+.bg-nav strong { width: 14rem; text-align: center; white-space: nowrap; }   /* a fixed width: the ‹ › stay put */
+.budget-modal { width: min(460px, 100%); }
+.bg-list { display: flex; flex-direction: column; gap: 10px; }
+.bg-card { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--tint); }
+.bg-card.overall { margin-bottom: 14px; border-color: var(--accent); }
+.bg-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.bg-name { font-weight: 600; flex: 1; }
+.bg-amounts { font-size: 14px; color: var(--muted); }
+.bg-group { display: flex; flex-direction: column; gap: 8px; }
+.bg-children { display: flex; flex-direction: column; gap: 8px; margin-left: 18px; padding-left: 12px; border-left: 3px solid var(--border); }
+.bg-children.hidden { display: none; }
+.bg-toggle { background: none; border: 0; cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 4px; color: var(--text); }
+.bg-headless { background: transparent; border-style: dashed; }
+.bg-edit { background: none; border: 0; cursor: pointer; font-size: 15px; padding: 2px 4px; }
+.bg-status { margin-top: 6px; font-size: 13px; color: var(--muted); }
+.bg-status.close { color: var(--yellow); }
+.bg-status.over { color: var(--red); font-weight: 600; }
+.bg-empty, .bg-note { color: var(--muted); font-size: 13px; }
+.bg-note { margin-top: 14px; }
+
+/* the Budgets tab and the Coming up row carry a mark while a budget needs attention */
+.ws-tab.has-alert::after { content: " \26A0\FE0F"; }
+.reminder-panel-budgets .reminder-item.over .ri-when { color: var(--red); font-weight: 600; }
+.reminder-panel-budgets .reminder-item.close .ri-when { color: var(--yellow); }

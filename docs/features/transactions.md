@@ -1,0 +1,12 @@
+# Transactions
+
+Income, expense and transfer, tags, search, and the balance left after each row.
+
+[← Back to the README](../../README.md) · [All features](../FEATURES.txt)
+
+- **Transactions**: income, expense and transfer (a transfer can carry a fee), with notes, descriptions and a
+  category with sub category. A category manager adds, renames, deactivates and deletes them.
+
+- **Tags on transactions.** Every transaction carries up to 10 short tags (`#dinner`, `#barbeque-nation`) that the app works out when you save it, in this order: the meaningful words of the **note and description** (names written with capitals such as "Barbeque Nation" stay one tag, words and phrases you have used before come first, small words like "for" and "the" are left out; up to three), then, while there are fewer than three, the **sub category**, then the **category**. In the form the Tags box fills in as you type the note and you can add your own, remove any with the ×, or press **↻ Suggest** to work them out again; a transaction whose tags you have not touched is tagged by the server when it is saved, and one saved with a list keeps exactly that list. The tags show as pills under the note in the Transactions list and the Calendar day (a pill opens the list on that tag), and a **row of tags above the list**, as in Notes, shows the most used ones (20, then "+ N more") with how many of the listed transactions carry each: click one to narrow the list to it, click it again to clear it, the search box finds them, and **Export CSV** and the Excel Transactions sheet have a Tags column. Transactions that existed before tags were added were tagged once at the first start; the Ledger, portfolio and jewellery transactions the app writes itself are tagged the same way. Everything is worked out on your computer from your own transactions.
+
+- **Remaining balance in every row.** Under the account in each transaction row (the Transactions list and the Calendar day) a grey line gives the **remaining balance of the account after that transaction**: "Savings Bank remaining balance ₹1,23,456". A transfer shows both accounts, a payment into a loan shows what is still owed on it ("Car Loan remaining owed ₹35,000"), and a credit card shows its card balance as below. It is the account's opening balance plus money in, less money out (fees included), in date order, so the last figure of an account is the balance on the Accounts view. Receivables, Jewellery and the Mutual Funds and Shares accounts have no such line (their balance comes from loans, items or holdings).

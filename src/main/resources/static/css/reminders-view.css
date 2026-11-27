@@ -1,0 +1,25 @@
+/* Reminders view: a summary strip, then the ticked reminders grouped by month, newest first. Rows reuse the .reminder-row styles. */
+
+.rv-summary { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: 14px; font-size: 14px; color: var(--muted); }
+
+.rv-summary strong { color: var(--text); font-size: 18px; margin-left: 4px; }
+
+.rv-summary .late strong { color: var(--red); }
+
+.rv-summary .ontime strong { color: var(--green); }
+
+.rv-empty { color: var(--muted); font-size: 14px; padding: 12px 4px; }
+
+.rv-month { border-bottom: 1px solid var(--border); }
+
+.rv-month > summary { cursor: pointer; padding: 10px 4px; font-weight: 700; font-size: 14px; }
+
+.rv-month > summary .rv-count { margin-left: 8px; font-weight: 400; color: var(--muted); }
+
+.rv-row .reminder-text { flex: 1; }
+
+.rv-row .reminder-delete { margin-left: 0; }
+
+.rv-for { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+.rv-late { font-size: 11px; font-weight: 700; color: var(--red); white-space: nowrap; }

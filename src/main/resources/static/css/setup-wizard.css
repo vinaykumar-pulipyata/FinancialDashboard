@@ -1,0 +1,24 @@
+/* First-time setup wizard: the account types overview and the add forms on the Bank & Cash and Loans & credit screens. */
+
+.setup-wizard { width: min(860px, 100%); }
+
+.glance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 6px; }
+.glance-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.glance-card h4 { margin: 0 0 4px; font-size: 15px; }
+.glance-card .what { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.glance-card .get { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.glance-tag { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 9px; border: 1px solid var(--border); color: var(--muted); }
+.glance-tag.now { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+
+.setup-lead { font-size: 15px; line-height: 1.6; margin: 0 0 12px; color: var(--text); }
+.setup-points { margin: 0 0 14px; padding-left: 22px; font-size: 14px; line-height: 1.7; }
+.setup-points strong { font-weight: 700; }
+
+.setup-entry { display: flex; align-items: center; gap: 14px; padding: 9px 4px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.setup-entry .pair { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.setup-entry .pair .label { color: var(--muted); }
+.setup-empty { color: var(--muted); font-size: 14px; padding: 10px 0; }
+
+.setup-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 12px; align-items: end; margin-top: 12px; }
+.setup-form .wizard-field { margin: 0; min-width: 0; }
+.setup-form-buttons { display: flex; gap: 8px; grid-column: 1 / -1; }

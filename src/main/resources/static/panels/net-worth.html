@@ -1,0 +1,39 @@
+<div class="panel-head">
+    <h2 class="section-title">&#128200; Net worth</h2>
+    <button class="reveal-toggle nw-eye" id="nwEye" type="button" title="Show the amounts" aria-pressed="false">&#128065;&#65039;</button>
+</div>
+<div class="nw-figures" id="nwFigures"></div>
+<div class="chart-note nw-values-note">Assets, Debt, the kinds of account under Assets and the allocation donut show today's values: your balances as they stand now, with investments, gold, property and vehicles at the value you last entered. They do not change with the date range or the zoom; the graph is the history.</div>
+<div class="chips nw-faces" id="nwFaces" role="group" aria-label="What to show">
+    <button class="chip active" data-face="graph" aria-pressed="true">&#128200; Graph</button>
+    <button class="chip" data-face="allocation" aria-pressed="false">&#127849; Allocation</button>
+</div>
+<div class="nw-flip" id="nwFlip">
+    <div class="nw-flip-inner">
+        <div class="nw-face" id="nwFaceGraph">
+            <div class="nw-summary" id="nwSummary"></div>
+            <div class="chips nw-view-options">
+                <span class="chips" id="nwTypes">
+                    <button class="chip active" data-type="line">Line</button>
+                    <button class="chip" data-type="bar">Bar</button>
+                    <button class="chip" data-type="area">Area</button>
+                </span>
+                <button class="chip" id="nwTableToggle">View as table</button>
+            </div>
+            <div class="nw-wrap" id="nwChart"></div>
+            <div class="hidden" id="nwTable"></div>
+            <div class="chips nw-options">
+                <span class="chips" id="nwZoom" role="group" aria-label="How much history to show">
+                    <button class="chip" data-zoom="1Y">1Y</button>
+                    <button class="chip" data-zoom="3Y">3Y</button>
+                    <button class="chip" data-zoom="5Y">5Y</button>
+                    <button class="chip" data-zoom="ALL">All</button>
+                </span>
+            </div>
+            <div class="chart-note nw-note" id="nwNote"></div>
+        </div>
+        <div class="nw-face back" id="nwFaceAllocation" inert>
+            <div class="nw-allocation" id="nwAllocation"></div>
+        </div>
+    </div>
+</div>

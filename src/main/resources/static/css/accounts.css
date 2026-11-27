@@ -1,0 +1,117 @@
+/* Funds & Accounts panel, including credit card usage and the Income/Expense/Transfer buttons. */
+
+.flow-level-label {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+    margin-bottom: 10px;
+}
+
+/* Each level has its own colour so the sections are easy to tell apart. The "Level N" label always says which it is,
+   so colour is never the only cue. */
+.level-group {
+    --lv: #7b8794;
+    margin-bottom: 18px; padding: 14px 16px 6px;
+    border-radius: 12px; border-left: 5px solid var(--lv);
+    background: color-mix(in srgb, var(--lv) 7%, transparent);
+}
+.level-1 { --lv: #0a84ff; }
+.level-2 { --lv: #00a86b; }
+.level-3 { --lv: #7c5cff; }
+.level-4 { --lv: #e08a00; }
+.level-5 { --lv: #0fa3b1; }
+.level-6 { --lv: #e5484d; }
+.level-7 { --lv: #7b8794; }
+.level-group .flow-level-label { color: color-mix(in srgb, var(--lv) 72%, black); }
+.level-group .level-add { background: var(--lv); border-color: var(--lv); color: #fff; }
+.level-group .level-add:hover { filter: brightness(1.08); }
+
+
+.account-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.account-row.child { margin-left: 28px; }
+
+.account-row.inactive { opacity: .7; background: var(--tint); border-style: dashed; filter: grayscale(1); }   /* switched off: flat grey and dashed, unlike the live rows */
+.account-row.inactive .name { color: var(--muted); font-style: italic; }
+.account-row.inactive .amount, .account-row.inactive .amount.liability { color: var(--muted); font-weight: 500; }
+.off-badge { font-size: 11px; font-weight: 600; font-style: normal; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; margin-left: 4px; white-space: nowrap; }
+.level-off { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; border-top: 1px dashed var(--border); padding-top: 10px; margin: 14px 0 8px; }
+.account-row.closed .amount, .account-row.closed .amount.liability { color: var(--green); font-weight: 600; }   /* a loan with nothing left to pay */
+
+.account-row .name { font-weight: 600; }
+
+.account-row .type { color: var(--muted); font-size: 12px; margin-left: 8px; }
+
+.account-row .amount { font-weight: 700; color: var(--accent); }
+
+.account-row .amount.liability { color: var(--red); }
+
+.card-usage { text-align: right; min-width: 220px; }
+
+.usage-text { font-size: 12px; color: var(--muted); margin: 2px 0 6px; }
+
+.edit-hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+.row-edit { flex: none; margin-left: 4px; font-size: 14px; vertical-align: baseline; }
+.row-edit:hover { opacity: 1; }
+
+.person-add { margin: 2px 0 10px 28px; }
+
+.earlier-link { margin-top: 4px; }
+
+/* Under a goal fund with a target: balance, target, remaining, monthly contribution, estimated date. */
+.goal-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;
+    margin: -2px 0 10px; padding: 12px 14px; background: var(--tint); border-radius: 10px;
+}
+.goal-stats .ef-tile .value { font-size: 15px; }
+
+/* Under a vehicle whose value has not been set for a while. */
+.value-reminder {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin: -2px 0 10px; padding: 8px 12px; border: 1px solid var(--yellow); border-radius: 10px;
+    background: color-mix(in srgb, var(--yellow) 8%, transparent); font-size: 13px; color: var(--text);
+}
+
+/* The Accounts view: a wall of coloured tiles, one per level (the colour comes from .level-N above). */
+.level-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.level-tile { display: flex; flex-direction: column; gap: 4px; min-height: 190px; padding: 24px 26px; border: none; border-radius: 18px;
+    text-align: left; cursor: pointer; font-family: inherit; color: #fff;
+    background: color-mix(in srgb, var(--lv) 72%, black); box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+    transition: transform .15s ease, box-shadow .15s ease; }
+.level-tile:hover, .level-tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0, 0, 0, .2); outline: none; }
+.level-tile { position: relative; }
+.lt-info { position: absolute; top: 14px; right: 16px; font-size: 18px; line-height: 1; opacity: .85; cursor: help; }
+.lt-info:hover { opacity: 1; }
+.lt-tip { display: none; position: absolute; top: 26px; right: 0; width: 230px; padding: 10px 12px; border-radius: 10px; z-index: 5;
+    background: #1f2937; color: #fff; font-size: 13px; font-weight: 400; line-height: 1.4; box-shadow: 0 8px 20px rgba(0, 0, 0, .3); }
+.lt-info:hover .lt-tip, .level-tile:focus-visible .lt-tip { display: block; }
+.lt-num { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; opacity: .9; }
+.lt-name { font-size: 24px; font-weight: 700; }
+.lt-total { margin-top: auto; font-size: 34px; font-weight: 700; }
+.lt-sub { font-size: 12px; opacity: .92; }   /* the market value and the gain or loss, small, under the big total invested */
+.lt-count { font-size: 14px; opacity: .9; }
+.level-back { margin-bottom: 12px; }
+
+/* The Investments level's head: total invested in big type, current value and the gain or loss small. */
+.level-market { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 4px 0 10px; }
+.level-market-big { font-size: 24px; font-weight: 700; }
+.level-fenced { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+.level-market-small { font-size: 13px; color: var(--muted); }

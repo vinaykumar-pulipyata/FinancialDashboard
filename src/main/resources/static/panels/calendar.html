@@ -1,0 +1,19 @@
+<div class="panel-head">
+    <h2 class="section-title">&#128197; Calendar</h2>
+    <div class="chips cal-nav">
+        <button class="btn btn-secondary" id="calPrev" title="Previous month">&lsaquo;</button>
+        <strong class="cal-month" id="calMonthLabel"></strong>
+        <button class="btn btn-secondary" id="calNext" title="Next month">&rsaquo;</button>
+    </div>
+</div>
+<div class="chips cal-modes" id="calModes" role="group" aria-label="Calendar display">
+    <button class="chip active" type="button" id="calModeCalendar" aria-pressed="true">Calendar</button>
+    <button class="chip" type="button" id="calModeExpense" aria-pressed="false" title="Colour each day by what was spent (red)">Expenses</button>
+    <button class="chip" type="button" id="calModeIncome" aria-pressed="false" title="Colour each day by what came in (green)">Income</button>
+</div>
+<div class="cal-totals" id="calTotals"></div>
+<div class="cal-heat-summary hidden" id="calHeatSummary"></div>
+<div class="cal-heat-legend hidden" id="calHeatLegend" aria-hidden="true"></div>
+<div class="foreign-note hidden">Some transactions in a foreign currency have no exchange rate saved, so they are not counted here.</div>
+<div class="cal-grid" id="calGrid"></div>
+<div class="cal-day" id="calDay"></div>

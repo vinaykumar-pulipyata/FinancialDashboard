@@ -1,0 +1,25 @@
+<!-- PERSON: someone you have lent money to. One list serves both Loans Given and Loans Collected -->
+<div class="modal-overlay hidden" id="personOverlay">
+    <div class="modal txn-transfer">
+        <div class="modal-header">
+            <h2 id="personTitle">Add person</h2>
+            <button class="modal-close" id="personClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="txn-field"><span>Name</span>
+                <input type="text" id="personName" maxlength="100" autocomplete="off">
+            </div>
+            <div class="txn-field"><span>Already owed to you before you started (&#8377;, optional)</span>
+                <input type="number" id="personOpening" min="0" step="any">
+            </div>
+            <div class="edit-hint" id="personHint"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-delete hidden" id="personDelete">Remove</button>
+            <span class="modal-error" id="personError"></span>
+            <button class="btn btn-secondary hidden" id="personWriteOff" title="Let it go: what they owe you comes down to zero, with a note">Write off</button>
+            <button class="btn btn-secondary" id="personCancel">Cancel</button>
+            <button class="btn btn-primary" id="personSave">Save</button>
+        </div>
+    </div>
+</div>

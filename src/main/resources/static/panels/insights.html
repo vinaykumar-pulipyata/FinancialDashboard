@@ -1,0 +1,25 @@
+<div class="panel-head">
+    <h2 class="section-title">&#128161; Spending Review</h2>
+    <div class="ins-nav">
+        <button class="btn btn-secondary icon-btn" id="insPrev" type="button" aria-label="Previous month">&lsaquo;</button>
+        <strong id="insMonthLabel"></strong>
+        <button class="btn btn-secondary icon-btn" id="insNext" type="button" aria-label="Next month">&rsaquo;</button>
+    </div>
+</div>
+<div class="foreign-note hidden">Some transactions in a foreign currency have no exchange rate saved, so they are not counted here.</div>
+<div class="ins-row">
+    <div class="ins-card ins-card-big">
+        <h3><span class="ins-icon">&#128184;</span> Biggest expense</h3>
+        <div id="insBiggest"></div>
+    </div>
+    <div class="ins-card ins-card-count">
+        <h3><span class="ins-icon">&#129534;</span> Transactions this month</h3>
+        <div class="ins-count" id="insCount"></div>
+        <div class="ins-count-detail" id="insCountDetail"></div>
+    </div>
+</div>
+<div class="ins-section ins-observations">
+    <h3>Spending observations</h3>
+    <div class="ins-obs-grid" id="insObservations"></div>
+</div>
+<p class="ins-note">The largest single expense of the month (Loans Given and balance adjustments are not spending). Observations compare with the month before (a month still running, with the same days of it); small means under ₹500.</p>

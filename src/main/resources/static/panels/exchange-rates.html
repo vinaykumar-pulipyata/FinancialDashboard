@@ -1,0 +1,29 @@
+<!-- EXCHANGE RATES: what one unit of each foreign currency is worth in rupees, by day. The newest rate on or before a day is used. -->
+<div class="modal-overlay hidden" id="ratesOverlay">
+    <div class="modal rates-modal">
+        <div class="modal-header">
+            <h2>Exchange rates</h2>
+            <button class="modal-close" id="ratesClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="reminder-hint">How many rupees one unit of the currency is worth. Foreign accounts count in your totals and net worth at the newest rate on or before each day, so add a new rate when it has moved. You need a rate before you can add an account in that currency.</div>
+            <div class="rates-new">
+                <div class="txn-field"><span>Currency</span>
+                    <select id="ratesCurrency"></select>
+                </div>
+                <div class="txn-field"><span>Date</span>
+                    <input type="date" id="ratesDate">
+                </div>
+                <div class="txn-field"><span id="ratesRateLabel">Rupees per 1 unit</span>
+                    <input type="number" id="ratesRate" min="0" step="any" inputmode="decimal" autocomplete="off">
+                </div>
+                <button class="btn btn-primary" id="ratesSave">Save rate</button>
+            </div>
+            <div id="ratesList"></div>
+        </div>
+        <div class="modal-footer">
+            <span class="modal-error" id="ratesError"></span>
+            <button class="btn btn-secondary" id="ratesDone">Close</button>
+        </div>
+    </div>
+</div>

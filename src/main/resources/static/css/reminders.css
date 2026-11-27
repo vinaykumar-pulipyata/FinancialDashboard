@@ -1,0 +1,44 @@
+/* "Coming up": up to three panels (Bills, Reminders, Recurring) side by side under the backup warning; they stack on a narrow window. */
+
+.reminder-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.reminder-bar.hidden { display: none; }
+.reminder-panel { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 12px; min-width: 0;
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.reminder-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 6px; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted); }
+.reminder-count { min-width: 20px; padding: 1px 7px; border-radius: 999px; text-align: center; font-size: 11px; font-weight: 700;
+    background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+/* A row: name and the line under it on the left, when it falls on the right. */
+.reminder-item { display: grid; grid-template-columns: 1fr auto; column-gap: 10px; flex: 1; min-width: 0; padding: 5px 0; background: none; border: none;
+    border-bottom: 1px solid var(--border); text-align: left; font: inherit; font-size: 14px; color: var(--text); cursor: pointer; }
+.reminder-panel > .reminder-item:last-child, .reminder-panel > .reminder-line:last-child .reminder-item { border-bottom: none; }
+.reminder-item:hover .ri-main, .reminder-item:focus-visible .ri-main { text-decoration: underline; }
+.reminder-item:focus-visible { outline: none; }
+.ri-main { overflow-wrap: anywhere; }
+.ri-detail { grid-column: 1; font-size: 12px; color: var(--muted); }
+.ri-when { grid-column: 2; grid-row: 1; align-self: start; font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.reminder-item.today .ri-main, .reminder-item.today .ri-when { font-weight: 700; color: var(--text); }
+.reminder-item.done .ri-main { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+.reminder-panel-done { background: color-mix(in srgb, var(--muted) 7%, var(--surface)); border-color: var(--border); }
+.reminder-more { margin-top: 6px; font-size: 12px; color: var(--muted); }
+.reminder-item.late .ri-main, .reminder-item.late .ri-when { font-weight: 700; color: var(--red); }
+
+/* Your own reminders: in the bar, under a day in the Calendar, and as a mark on the cell (top right, beside the notes mark). */
+.reminder-line { display: flex; align-items: center; gap: 8px; }
+.reminder-check { margin: 0; cursor: pointer; }
+.reminder-move { margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 999px; padding: 0 10px; font: inherit;
+    font-size: 12px; color: var(--accent); cursor: pointer; }
+.reminder-move:hover, .reminder-move:focus-visible { background: color-mix(in srgb, var(--accent) 12%, transparent); outline: none; }
+.reminder-modal { width: min(520px, 100%); }
+.cal-reminders { margin-top: 14px; }
+.reminder-row { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.reminder-row[draggable="true"] { cursor: grab; }
+.reminder-text { background: none; border: none; padding: 0; font: inherit; color: var(--text); text-align: left; cursor: pointer; }
+.reminder-text:hover, .reminder-text:focus-visible { text-decoration: underline; outline: none; }
+.reminder-row.done .reminder-text { text-decoration: line-through; color: var(--muted); }
+.reminder-delete { margin-left: auto; background: none; border: none; padding: 0 2px; font-size: 14px; cursor: pointer; opacity: .6; }
+.reminder-delete:hover, .reminder-delete:focus-visible { opacity: 1; outline: none; }
+.reminder-when { margin-left: auto; font-size: 12px; color: var(--muted); }
+.cal-remind { font-size: 12px; line-height: 1; }
+.cal-cell.drop { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.reminder-hint { font-size: 13px; color: var(--muted); }

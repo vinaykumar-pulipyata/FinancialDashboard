@@ -1,0 +1,21 @@
+/* Backups: the warning bar at the top of the dashboard and the Backups popup. */
+
+.backup-banner { padding: 10px 16px; border-radius: 10px; margin-bottom: 14px; font-size: 14px; font-weight: 600; cursor: pointer; line-height: 1.4; }
+.backup-banner.error { background: var(--red-fill); color: #fff; }
+.backup-banner.warning { background: color-mix(in srgb, var(--yellow) 18%, var(--surface)); color: var(--text); border: 1px solid var(--yellow); }
+.backup-banner.hidden { display: none; }
+.backup-banner.warning { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.backup-dismiss { flex: none; background: none; border: none; padding: 2px 6px; border-radius: 6px; font: inherit; font-size: 14px; line-height: 1;
+    color: var(--muted); cursor: pointer; }
+.backup-dismiss:hover, .backup-dismiss:focus-visible { color: var(--text); background: color-mix(in srgb, var(--yellow) 25%, transparent); outline: none; }
+
+.backup-modal { width: min(640px, 100%); }
+.backup-state { font-size: 14px; line-height: 1.6; margin-bottom: 14px; }
+.backup-state .good { color: var(--green); font-weight: 700; }
+.backup-state .bad { color: var(--red); font-weight: 700; }
+.backup-buttons { display: flex; gap: 8px; margin: 10px 0 4px; }
+.backup-sub { font-size: 14px; margin: 18px 0 6px; }
+.backup-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.backup-row .size { color: var(--muted); }
+.backup-restore { margin-top: 16px; }
+.backup-restore code { display: block; margin-top: 4px; padding: 4px 8px; background: var(--bg); border-radius: 6px; font-size: 12px; word-break: break-all; }

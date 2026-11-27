@@ -1,0 +1,18 @@
+<!-- IMPORT (a page, opened from the menu: Data > Import): load a file made by Export to Excel into a new, empty database -->
+<div class="panel-head">
+    <h2 class="section-title">&#128229; Import from Excel</h2>
+</div>
+<p class="import-note">Load a file made by <strong>Export to Excel</strong> into a <strong>new, empty</strong> database. Nothing is changed in a database that already
+    has accounts or transactions. Choose the file and press <strong>Check the file</strong>: it goes through everything exactly as the import would and tells you what it
+    found, without saving anything. Then press <strong>Import</strong>.</p>
+<div class="import-pick">
+    <input type="file" id="importFile" accept=".xlsx" aria-label="The Excel file to import">
+    <button class="btn btn-secondary" id="importCheck" disabled>Check the file</button>
+    <button class="btn btn-primary" id="importApply" disabled>Import</button>
+</div>
+<div class="import-progress hidden" id="importProgress" role="status" aria-live="polite">
+    <div class="usage-bar"><div class="usage-fill low" id="importProgressFill"></div></div>
+    <div id="importProgressText"></div>
+</div>
+<div class="import-error" id="importError" role="alert"></div>
+<div id="importReport"></div>

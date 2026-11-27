@@ -1,0 +1,59 @@
+<!-- ADD ACCOUNT: opened from a level's "+ Add account" button, shows only that level's account types -->
+<div class="modal-overlay hidden" id="addAccOverlay">
+    <div class="modal add-acc-modal txn-transfer">
+        <div class="modal-header">
+            <h2 id="addAccTitle">Add account</h2>
+            <button class="modal-close" id="addAccClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <p class="add-acc-intro" id="addAccIntro"></p>
+            <div class="add-acc-types" id="addAccTypes"></div>
+            <div id="addAccExtras"></div>
+
+            <div>
+                <div class="txn-field" id="addAccNameRow"><span>Account name</span>
+                    <input type="text" id="addAccName" maxlength="100" autocomplete="off">
+                </div>
+                <div class="txn-field hidden" id="addAccCurrencyRow"><span>Currency</span>
+                    <select id="addAccCurrency"></select>
+                </div>
+                <div class="txn-field"><span id="addAccBalanceLabel">Opening balance (&#8377;)</span>
+                    <input type="number" id="addAccBalance" min="0" step="any">
+                </div>
+                <div class="txn-field hidden" id="addAccPlateRow"><span>Number plate (optional)</span>
+                    <input type="text" id="addAccPlate" maxlength="20" autocomplete="off" placeholder="MH12 AB 1234">
+                </div>
+                <div class="txn-field hidden" id="addAccYearRow"><span>Year bought (optional)</span>
+                    <input type="number" id="addAccYear" min="1900" step="1" placeholder="2019">
+                </div>
+                <div class="txn-field hidden" id="addAccLimitRow"><span>Credit limit (&#8377;) *</span>
+                    <input type="number" id="addAccLimit" min="0" step="any">
+                </div>
+                <div class="txn-field hidden" id="addAccStatementRow"><span>Statement (bill) generated on day of the month (optional)</span>
+                    <input type="number" id="addAccStatement" min="1" max="31" step="1" placeholder="5">
+                </div>
+                <div class="txn-field hidden" id="addAccDueRow"><span>Bill due on day of the month (optional)</span>
+                    <input type="number" id="addAccDue" min="1" max="31" step="1" placeholder="21">
+                </div>
+                <div class="txn-field hidden" id="addAccPlanRow"><span>How is it paid?</span>
+                    <select id="addAccPlan">
+                        <option value="FIXED">Fixed: the same EMI every month</option>
+                        <option value="CUSTOM">Custom: any amount, any time</option>
+                    </select>
+                </div>
+                <div class="txn-field hidden" id="addAccEmiRow"><span>Monthly EMI (&#8377;) *</span>
+                    <input type="number" id="addAccEmi" min="0" step="any">
+                </div>
+                <div class="txn-field hidden" id="addAccTargetRow"><span>Target (&#8377;, optional)</span>
+                    <input type="number" id="addAccTarget" min="0" step="any">
+                </div>
+                <div class="edit-hint" id="addAccHint"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="modal-error" id="addAccError"></span>
+            <button class="btn btn-secondary" id="addAccCancel">Cancel</button>
+            <button class="btn btn-primary" id="addAccSave">Add account</button>
+        </div>
+    </div>
+</div>

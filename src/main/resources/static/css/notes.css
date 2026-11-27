@@ -1,0 +1,49 @@
+/* Notes: the diary list, a note card, and the small marks and list on the calendar. */
+
+.note-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.note-search { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 14px; min-width: 220px; background: var(--surface); color: var(--text); }
+
+.note-day { margin: 18px 0 8px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.note-card { display: block; width: 100%; box-sizing: border-box; text-align: left; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; }
+.note-card:hover, .note-card:focus-visible { border-color: var(--accent); outline: none; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.note-tag-bar { margin: 0 0 6px; }
+.note-tag-bar:empty { display: none; }
+.tag-pill { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 12px; font-weight: 600; line-height: 1.6; padding: 0 10px; border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent);
+    cursor: pointer; white-space: nowrap; }
+.tag-pill:hover, .tag-pill:focus-visible { background: color-mix(in srgb, var(--accent) 22%, transparent); outline: none; }
+.tag-pill.active { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+.tag-pill .tag-count { font-weight: 400; opacity: .8; }
+.tag-input { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.tag-input input { flex: 1 1 120px; min-width: 100px; border: none; outline: none; padding: 4px; font: inherit; font-size: 14px; background: transparent; color: var(--text); }
+.tag-input .tag-pill { cursor: default; }
+.tag-x { border: none; background: none; color: inherit; font: inherit; cursor: pointer; padding: 0; line-height: 1; }
+
+.note-card .note-title { font-weight: 700; margin-bottom: 4px; }
+.note-card .note-body { white-space: pre-wrap; line-height: 1.55; font-size: 14px; overflow-wrap: anywhere;
+    display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+
+.note-modal { width: min(640px, 100%); }
+.note-modal textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; font-size: 14px;
+    line-height: 1.5; resize: vertical; background: var(--surface); color: var(--text); }
+.note-count { text-align: right; font-size: 12px; color: var(--muted); }
+
+/* On the calendar: a mark on days that have notes, and the day's notes under its transactions. */
+.cal-cell { position: relative; }
+.cal-marks { position: absolute; top: 4px; right: 6px; display: flex; gap: 3px; }
+.cal-note { font-size: 12px; line-height: 1; }
+.cal-notes { margin-top: 14px; }
+.cal-notes-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
+.note-folder-bar { margin: 0 0 8px; align-items: center; }
+.note-folder-bar .txn-link { margin-left: 6px; }
+.note-folder-tag { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.note-card.note-hidden { cursor: pointer; }
+.note-card.note-hidden .note-title, .note-card.note-hidden .note-body { color: var(--muted); letter-spacing: 1px; user-select: none; }
+
+/* Reading a note */
+.note-read { width: min(720px, 100%); }
+.note-read-meta { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+.note-read-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; line-height: 1.7; max-height: 60vh; overflow-y: auto; }
+.note-read-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }

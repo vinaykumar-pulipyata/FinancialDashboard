@@ -1,0 +1,261 @@
+PERSONAL FINANCIAL DASHBOARD - FEATURE LIST
+===========================================
+
+A single-user personal finance app (INR only). Spring Boot back end, file-based H2 database, plain HTML/CSS/JavaScript
+front end. Everything runs on your own computer.
+
+
+1. VIEWS (the tab row)
+----------------------
+- Calendar: one month at a time, money in (green) and out (red) for each day, a line with the month's In, Out and Net.
+- Calendar markers: Ledger payments due, credit card bill days, diary notes (note icon), reminders (bell icon).
+- Calendar day: click a day to see its transactions, Ledger payments, reminders and notes; add a reminder from it.
+- Transactions: every transaction, newest first, with paging (10, 25, 50 or 100 a page) and an edit/delete pencil per row.
+- Budgets: monthly spending limits with how much of each is used.
+- Spending Review: the biggest expense and spending observations for each month.
+- Stats: income and expense donuts by category, with their own period (Weekly, Monthly, Annually, Period).
+- Accounts: coloured tiles, one per level; click a tile to see and add that level's accounts.
+- Net worth: assets, debt and total, plus a month-end net worth graph.
+- Reminders and Notes: reached from the sidebar (Organiser group), not from the tab row.
+- One card that turns over to show the chosen view; the Calendar is shown first.
+
+
+2. DATE RANGE
+-------------
+- A shared Today / From / To row scopes the Calendar, Transactions, Net worth and the line graphs.
+- Clear button to remove the range.
+- The Calendar jumps to the range's month and highlights its days.
+- Stats has its own period buttons; Accounts, Budgets, Spending Review, Notes and Reminders are not scoped by dates.
+- A round red + opens a new Expense (switch to Income or Transfer at the top of the form, date and amount are kept).
+
+
+3. TRANSACTIONS
+---------------
+- Income, expense and transfer, with a note, a description, a category and sub category.
+- A transfer can carry a fee.
+- Account lists put the most used account first; the Note field suggests earlier notes of the same kind.
+- Search box: words that must all appear in note, description, category, accounts, person, kind, date or amount.
+- Filters: category (with its sub categories, or Uncategorised), account (either side), amount range, kind chips.
+- A line of totals (found, in, out) while searching.
+- Export CSV of everything listed (all pages), safe against spreadsheet formula injection.
+- Jump to the matching list from an account row or from a Stats category.
+- Columns: Date, Type, Category, Sub category, Note, Account, Amount (stacked on a narrow window).
+- Tags: each transaction gets up to 10 tags worked out from its note and description, then its sub category, then its category;
+  you can add, remove or re-suggest them in the form; they show as pills (a pill opens the list on that tag), a row of the most used
+  tags with counts sits above the list like in Notes (click to narrow the list, click again to clear), they are found by the
+  search box, and are in the CSV and Excel exports. Existing transactions were tagged once; Ledger, portfolio and jewellery
+  transactions are tagged too.
+
+
+4. ACCOUNTS
+-----------
+- Account types: cash, bank, digital wallet, goal fund, investment, gold, jewellery, property, vehicle, receivables,
+  debt, credit card and other.
+- Seven levels: Liquid money, Goals, Investments, Fixed assets, Money owed to you, Liabilities, Other.
+- Balances are always calculated from the opening balance and the transactions, never stored.
+- Debts and credit cards show the amount owed.
+- Per-level "+ Add account" popup; edit, deactivate and delete accounts.
+- Digital wallets (PhonePe, Paytm, Amazon Pay): top up with a transfer, spend with an expense.
+- Vehicles with number plate and year bought.
+- A button on each account row jumps to its transactions.
+- Safeguards: only one Receivables and one Jewellery account; an account cannot change between an asset and a debt, or into or
+  out of Receivables, Jewellery or Credit Card (add a new account instead).
+
+
+5. CREDIT CARDS AND LOANS YOU OWE
+---------------------------------
+- Credit card limit, usage bar, withdrawal (taken and not yet paid back) and credit still available.
+- Optional statement day and bill due day (two different days; a short month uses its last day).
+- Statement cycles: a fold under each card's row in the Accounts view shows one cycle at a time with ‹ dates › to page between
+  cycles (it opens on the running one): bill status (paid, part paid, due, overdue), spent and paid totals, and the transactions
+  in pages like the main list (10/25/50/100 a page) with chips All, Spent and Paid into the card. The main Transactions list is unchanged.
+- A "remaining balance" line under the account of every transaction row (both accounts of a transfer): the account's balance just
+  after that transaction; a loan shows what is still owed, a card the credit left on it. Not for Receivables, Jewellery, Mutual Funds or Shares.
+- Pay button on each card and loan row: records a Liability Payments expense that lowers the amount owed.
+- Fixed loans (a set monthly EMI, pre-filled in the Pay window) or custom loans (any amount, any time).
+
+
+6. EMERGENCY FUND AND GOAL FUNDS
+--------------------------------
+- Emergency Fund with a target (months of essential expenses, or an amount), progress, runway and an estimated date.
+- Goal funds with targets and progress.
+- Ring-fencing: once a goal's target is reached, money can go in but nothing can come out until released.
+
+
+7. FUTURE EXPENSES LEDGER
+-------------------------
+- One pot of money split into buckets for bills you know are coming (insurance, wifi, subscriptions).
+- Fund it from a bank account, pay a bill from a bucket, credit interest, move money between buckets, edit and close buckets.
+- A default Buffer bucket absorbs extra money, so nothing is ever unallocated.
+- Every change is kept as history; next payment dates appear in the Calendar and in Coming up.
+
+
+8. MUTUAL FUNDS AND SHARES
+--------------------------
+- Holdings with optional quantity, invested amount, current value, gain and gain percent, shown to the paisa.
+- Invest from a bank or cash account, withdraw, update a value by hand.
+- Dividends on shares, recorded as income.
+- Each day's figures are saved to draw value-over-time graphs (Stats button).
+- Allocation donut showing how the card's money is split between its holdings.
+
+
+9. JEWELLERY
+------------
+- Gold, silver, platinum and diamond items kept as items (name, type, weight, price paid) in one Jewellery account.
+- Add an item you already own, or one paid from a bank or cash account.
+- Sell all or part of an item into a bank or cash account (the difference is recorded as income or an expense).
+- Remove an item with no money moving; ordinary transactions on the account are refused.
+
+
+10. LOANS YOU GAVE (RECEIVABLES)
+--------------------------------
+- People you have lent to, with Loans Given and Loans Collected as fixed categories tied to a person.
+- Receivables is worked out from them; it is shown but not counted in net worth.
+- Split an expense with people: tick "Split this expense with people" in the Expense form, choose people from the Receivables list (or
+  add one on the spot) and share the bill equally (you are one of the members), by amount or by percent. The transaction keeps its full
+  amount; each person's share is owed under their name in Receivables, which folds out into the expenses shared with them.
+- Settle: the Settle button on a person records a payment (day, account, amount, optional note) and clears their oldest shared expenses
+  first, or only the ones you tick; each expense shows what is settled and left, and each payment lists what it cleared.
+- Stats, Budgets, Spending Review, the Calendar totals and the Transactions found-totals count a split expense at your own share only.
+- When somebody else paid: tick the Split box (Paid by only appears then; otherwise every expense is yours) and choose them in "Paid by" and enter your share of the bill. No account moves; what you owe them is its
+  own "You owe people" line (under the people in Receivables, and a grey line under net worth), never taken off Receivables or net worth.
+- One balance per person (what they owe you, loans included, less what you owe them; negative when you owe them) and one Settle
+  button beside the name: what you owe each other is set off first, the rest is paid by whoever owes (from them when they owe you,
+  from you only when you owe more; not counted as lending). The Receivables total is that balance across everyone. The arrow before a name folds out their
+  transactions: loans, shared expenses and bills they paid for you, what they owed before you started, any write-off (with its day and reason; change them with the pencil or take the write-off back with the bin), and the payments.
+
+
+11. NET WORTH
+-------------
+- Figures as a sum: Assets, minus Debt, and the total; hidden until you press the eye.
+- Fold-out of Assets by kind of account.
+- Month-end graph as Line, Bar or Area; 1Y, 3Y, 5Y and All zoom; long stretches drawn per quarter.
+- Summary line (movement, best and weakest month) and a table grouped by year.
+- "Where your assets are" allocation ring on the back of the graph.
+- History replays every transaction by month for up to five years (60 months).
+
+
+12. STATS
+---------
+- Income and expense donuts by category (every category is its own slice), with a table that doubles as the legend.
+- Click a category to see it month by month, with sub categories.
+- Periods: Weekly, Monthly (default), Annually or any From and To, with arrows to move.
+
+
+13. BUDGETS
+-----------
+- Monthly spending limit on all spending, and on any expense category, main or sub (for example Food, or Food > Dining out).
+- A main category's limit counts its sub categories; a sub category's counts only itself, so both can be set.
+- Each card shows used, left and a green, amber or red bar; ok under 80%, close from 80%, over above 100%.
+- A main budget and its sub budgets are grouped and fold (open by itself when one needs attention).
+- Month arrows to look at earlier months; the same limit repeats every month.
+- Alerts: a Budgets panel in the Coming up bar and a warning mark on the tab for budgets that are close or over.
+- Deleting a category removes its limit; limits appear on the Budgets sheet of the Excel export.
+
+
+14. SPENDING REVIEW
+-------------------
+- Works by month with previous / next arrows.
+- Biggest expense: the largest single expense of the month (amount, note or category, day).
+- Transactions this month: the count, with expenses / income / transfers, the busiest day and the number of active days.
+- Spending observations (one panel, three tinted panels inside): Spending increased, Spending decreased (categories that
+  moved by at least 20% and Rs 500 against the month before; the running month against the same days) and Insight: frequent
+  small expenses (categories with 5 or more expenses under Rs 500).
+- Worked out in the browser; Loans Given and balance adjustments are not counted as spending.
+
+15. REMINDERS AND "COMING UP"
+-----------------------------
+- Coming up bar with panels: Bills (card bills, statements, Ledger payments), Reminders, Recurring, Budgets, Done recently.
+- Bills panel: card bills due within 7 days (using the statement when one exists), Ledger payments, late ones up to 30 days.
+- Your own reminders: a day and a title, a tick box, late ones stay at the top, a Tomorrow button.
+- Drag and drop: drag an open one-off reminder from one calendar day to another (titles show inside the day's cell), or from the day list
+  or the Coming up bar onto a day; repeating and ticked reminders are not draggable.
+- Repeating reminders (every week, month or year) with each occurrence tickable separately; birthdays show a years count.
+- Done recently: reminders ticked in the last 7 days, still tickable to bring one back.
+- Reminders view: ticked reminders grouped by month, a summary strip (this week, month, year, on time or late), search,
+  year filter and paging.
+- Clicking an item opens that day in the Calendar.
+
+
+16. NOTES (DIARY)
+-----------------
+- Any number of notes for any day, with optional title and tags.
+- Tags are worked out from the title and text (names, repeated words, words and phrases used in earlier note tags; at most four)
+  while you type; add your own, remove any, or press Suggest to work them out again.
+- Tag list with counts to narrow the list; search over text and tags; paged list.
+- Notes appear on the Calendar day and are marked on the Calendar.
+- Clicking a note opens it in a reading view (day, folder, title, full text, tags); its Edit button opens the form.
+
+
+17. CATEGORIES
+--------------
+- Starter categories on first run (a short flat list), then add, rename, deactivate and delete your own.
+- Two levels: categories and sub categories.
+- Fixed categories (Loans Given, Loans Collected, Liability Payments) are protected from edits.
+
+
+18. SIDE MENU
+-------------
+- Collapsible sidebar; the hamburger button folds it to a slim bar or opens it; the choice is remembered.
+- Starts folded on a narrow window.
+- Items nested under five groups; pointing at a group opens its items in a flyout beside it (no click needed): Organiser (Reminders, Notes), Categories (Edit / Add categories),
+  Themes (Light, Dark, Color), Data (Backups, Export to Excel), Account (Screen lock, Change password).
+- The pressed item shows which Organiser view is open.
+
+
+19. THEMES AND MOTION
+---------------------
+- Three themes: Light, Dark and Color (teal accent, mint-to-peach page); remembered in the browser.
+- Until you choose, Light or Dark follows the computer; applied before anything is drawn (no flash).
+- Chart colours checked for contrast and colour-blind separation.
+- Motion: fade-ins, press feedback, rising rows, ring sweeps, count-up figures, sliding bars; none of it when the computer
+  is set to reduce motion.
+
+
+20. FIRST-RUN SETUP
+-------------------
+- Setup wizard on first run: choose a password, then add your accounts level by level.
+- Starter categories loaded automatically.
+
+
+21. SECURITY
+------------
+- One user (admin) over HTTP Basic; the password is set in the app and stored only as a BCrypt hash.
+- Screen lock covers the page when it opens, after 15 minutes idle, and from the menu button.
+- Wrong-password throttle (10 failures, then a 30 second lock).
+- Server listens on 127.0.0.1 only; requests from other host names are refused.
+- Changes to the API need the X-Requested-With header (cross-site protection).
+- Forgot the password: start with --reset-password (data is untouched).
+
+
+22. BACKUPS
+-----------
+- Automatic checked backups: at start, at close and daily; each verified against the live data before it is kept.
+- Keeps the last 30 days plus the first backup of every month; optional second folder (iCloud, Dropbox, USB).
+- Red warning bar when a backup fails or is old; yellow bar while backups are only on this computer (can be hidden).
+- Backups popup showing status; restore with --restore=FILE (the old database is moved aside, never deleted).
+
+
+23. EXCEL EXPORT
+----------------
+- One button downloads a workbook with sheets for accounts, transactions, income and expenses by category, monthly totals,
+  net worth, Ledger and entries, Emergency Fund, Mutual Funds, Shares, Jewellery, loans, categories, budgets, notes,
+  reminders and holding history.
+- Native Excel charts next to their tables.
+
+
+24. LOGGING AND DIAGNOSTICS
+---------------------------
+- Server log by day under logs/, with request logging and change logging by id (never amounts, names or text).
+- The page also logs errors and start-up problems to the server log.
+
+
+25. RUNNING AND DEMO DATA
+-------------------------
+- scripts/financial-dashboard.sh starts the app (and an optional local Caddy proxy for http://finance.localhost/).
+- scripts/check-setup.sh checks which tools are installed.
+- Demo database: scripts/financial-dashboard.sh demo, then scripts/load-demo-data.py loads five years of data
+  (accounts, thousands of transactions, funds, loans, Ledger, notes, reminders, portfolios, jewellery, sub categories,
+  budgets and stand-outs for Spending Review).
+- Database changes are applied by Flyway migrations; existing databases are never rebuilt.
+- Tests: Java service and API tests, plus JavaScript tests for the front end (npm-free, Node's built-in runner).

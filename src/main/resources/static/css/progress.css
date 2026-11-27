@@ -1,0 +1,61 @@
+/* Progress bars: one look for every bar (Ledger buckets, the Emergency Fund, goals and credit card usage).
+   A soft pill-shaped track with a gentle inset, a gradient fill with a light top highlight, and a short grow-in. */
+
+.usage-bar, .ef-bar, .lg-bar {
+    position: relative;
+    width: 100%;
+    height: 14px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--track-from), var(--track-to));
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.16);
+}
+
+/* The credit card usage bar sits in a tight row, so it stays a little slimmer. */
+.usage-bar { height: 10px; }
+
+/* Faint marks at a quarter, a half and three quarters, so you can read how far along a bar is. */
+.usage-bar::after, .ef-bar::after, .lg-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(90deg, transparent calc(25% - 0.5px), rgba(255, 255, 255, 0.75) calc(25% - 0.5px), rgba(255, 255, 255, 0.75) calc(25% + 0.5px), transparent calc(25% + 0.5px)),
+        linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.75) calc(50% - 0.5px), rgba(255, 255, 255, 0.75) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        linear-gradient(90deg, transparent calc(75% - 0.5px), rgba(255, 255, 255, 0.75) calc(75% - 0.5px), rgba(255, 255, 255, 0.75) calc(75% + 0.5px), transparent calc(75% + 0.5px));
+}
+
+.usage-fill, .ef-fill, .lg-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--bar-from, #3b6ea5), var(--bar-to, #6da7ec));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 6px var(--bar-glow, rgba(59, 110, 165, 0.3));
+    transform-origin: left center;
+    transition: filter .15s ease;
+}
+
+/* Colours. Green means done or healthy, amber in between, red needs attention, blue is everything else. */
+.lg-fill.funded, .ef-fill.reached, .usage-fill.low {
+    --bar-from: #2e7d32; --bar-to: #66bb6a; --bar-glow: rgba(46, 125, 50, 0.35);
+}
+.usage-fill.mid {
+    --bar-from: #b58900; --bar-to: #e6c04d; --bar-glow: rgba(181, 137, 0, 0.35);
+}
+.usage-fill.high {
+    --bar-from: #c62828; --bar-to: #ef6b6b; --bar-glow: rgba(198, 40, 40, 0.35);
+}
+/* The 12px bar sits in a 24px hit area so it is easy to point at. */
+.lg-bar-hit { padding: 6px 0; cursor: default; border-radius: 8px; }
+.lg-bar-hit:hover .lg-fill, .lg-bar-hit:focus-visible .lg-fill, .ef-bar:hover .ef-fill { filter: brightness(1.1); }
+.lg-bar-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+
+/* Only a bar that is new on the page grows in; a redraw keeps the bars as they are. */
+@media (prefers-reduced-motion: no-preference) {
+    .usage-fill.grow, .ef-fill.grow, .lg-fill.grow { animation: bar-grow .7s cubic-bezier(.2, .8, .2, 1) both; }
+}
+
+@keyframes bar-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Financial Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E">   <!-- inline, so the browser does not ask the server for /favicon.ico -->
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/color-theme.css">
+    <link rel="stylesheet" href="css/summary.css">
+    <link rel="stylesheet" href="css/accounts.css">
+    <link rel="stylesheet" href="css/card-cycles.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/lock.css">
+    <link rel="stylesheet" href="css/transaction-form.css">
+    <link rel="stylesheet" href="css/period-filter.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/net-worth.css">
+    <link rel="stylesheet" href="css/transactions.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="css/workspace.css">
+    <link rel="stylesheet" href="css/backup.css">
+    <link rel="stylesheet" href="css/exchange-rates.css">
+    <link rel="stylesheet" href="css/notes.css">
+    <link rel="stylesheet" href="css/reminders.css">
+    <link rel="stylesheet" href="css/jewellery.css">
+    <link rel="stylesheet" href="css/recurring-deposits.css">
+    <link rel="stylesheet" href="css/reminders-view.css">
+    <link rel="stylesheet" href="css/budgets.css">
+    <link rel="stylesheet" href="css/insights.css">
+    <link rel="stylesheet" href="css/header-menu.css">
+    <link rel="stylesheet" href="css/flip.css">
+    <link rel="stylesheet" href="css/emergency-fund.css">
+    <link rel="stylesheet" href="css/ring-fence.css">
+    <link rel="stylesheet" href="css/ledger.css">
+    <link rel="stylesheet" href="css/portfolio-stats.css">
+    <link rel="stylesheet" href="css/categories.css">
+    <link rel="stylesheet" href="css/import.css">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/wizard.css">
+    <link rel="stylesheet" href="css/setup-wizard.css">
+    <link rel="stylesheet" href="css/add-account.css">
+    <link rel="stylesheet" href="css/motion.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <meta name="color-scheme" content="light dark">
+    <script src="js/core/theme.js"></script>   <!-- first, so the saved theme is on the page before anything is drawn -->
+    <script src="js/core/boot-log.js"></script>   <!-- reports a module that fails to load, which client-log.js cannot -->
+</head>
+
+<body>
+
+<!-- Page shell. Each panel lives in panels/*.html and is loaded by js/app.js. -->
+<div class="container hidden" id="dashboardContainer">
+
+    <!-- Side menu: a collapsible sidebar. The button at the top folds it to a rail of icons or opens it with the labels; the choice is kept -->
+    <nav class="side-menu" aria-label="Menu">
+        <div class="side-top">
+            <button class="btn btn-secondary" id="menuButton" aria-expanded="true" aria-controls="menuPanel" aria-label="Collapse menu" title="Collapse menu">&#9776;</button>
+            <span class="side-title side-label">Menu</span>
+        </div>
+        <div class="side-items" id="menuPanel">
+            <div class="menu-group" role="group" aria-labelledby="menuGroupOrganiser">
+                <h3 class="menu-group-title">
+                    <button class="menu-group-toggle" id="menuGroupOrganiser" aria-expanded="false" aria-controls="menuGroupOrganiserItems"><span class="menu-chevron" aria-hidden="true">&#9656;</span><span class="side-label">Organiser</span></button>
+                </h3>
+                <div class="menu-sub" id="menuGroupOrganiserItems">
+                    <button class="btn btn-secondary side-item menu-view" id="menuReminders" data-view="reminders" aria-pressed="false" title="Reminders"><span class="side-icon" aria-hidden="true">&#9989;</span><span class="side-label">Reminders</span></button>
+                    <button class="btn btn-secondary side-item menu-view" id="menuNotes" data-view="notes" aria-pressed="false" title="Notes"><span class="side-icon" aria-hidden="true">&#128221;</span><span class="side-label">Notes</span></button>
+                </div>
+            </div>
+            <div class="menu-group" role="group" aria-labelledby="menuGroupCategories">
+                <h3 class="menu-group-title">
+                    <button class="menu-group-toggle" id="menuGroupCategories" aria-expanded="false" aria-controls="menuGroupCategoriesItems"><span class="menu-chevron" aria-hidden="true">&#9656;</span><span class="side-label">Categories</span></button>
+                </h3>
+                <div class="menu-sub" id="menuGroupCategoriesItems">
+                    <button class="btn btn-secondary side-item menu-view" id="editCategoriesButton" data-view="categories" aria-pressed="false" title="Edit / Add categories"><span class="side-icon" aria-hidden="true">&#127991;&#65039;</span><span class="side-label">Edit / Add categories</span></button>
+                </div>
+            </div>
+            <div class="menu-group" role="group" aria-labelledby="menuGroupThemes">
+                <h3 class="menu-group-title">
+                    <button class="menu-group-toggle" id="menuGroupThemes" aria-expanded="false" aria-controls="menuGroupThemesItems"><span class="menu-chevron" aria-hidden="true">&#9656;</span><span class="side-label">Themes</span></button>
+                </h3>
+                <div class="menu-sub" id="menuGroupThemesItems">
+                    <button class="btn btn-secondary side-item" id="theme-light" aria-pressed="false" title="Light"><span class="side-icon" aria-hidden="true">&#9728;&#65039;</span><span class="side-label">Light</span></button>
+                    <button class="btn btn-secondary side-item" id="theme-dark" aria-pressed="false" title="Dark"><span class="side-icon" aria-hidden="true">&#127769;</span><span class="side-label">Dark</span></button>
+                    <button class="btn btn-secondary side-item" id="theme-color" aria-pressed="false" title="Color"><span class="side-icon" aria-hidden="true">&#127912;</span><span class="side-label">Color</span></button>
+                </div>
+            </div>
+            <div class="menu-group" role="group" aria-labelledby="menuGroupData">
+                <h3 class="menu-group-title">
+                    <button class="menu-group-toggle" id="menuGroupData" aria-expanded="false" aria-controls="menuGroupDataItems"><span class="menu-chevron" aria-hidden="true">&#9656;</span><span class="side-label">Data</span></button>
+                </h3>
+                <div class="menu-sub" id="menuGroupDataItems">
+                    <button class="btn btn-secondary side-item" id="backupButton" title="Backups"><span class="side-icon" aria-hidden="true">&#128190;</span><span class="side-label">Backups</span></button>
+                    <button class="btn btn-secondary side-item" id="exchangeRatesButton" title="Exchange rates"><span class="side-icon" aria-hidden="true">&#128177;</span><span class="side-label">Exchange rates</span></button>
+                    <button class="btn btn-secondary side-item" id="exportButton" title="Export to Excel"><span class="side-icon" aria-hidden="true">&#128228;</span><span class="side-label">Export to Excel</span></button>
+                    <button class="btn btn-secondary side-item menu-view" id="importButton" data-view="import" aria-pressed="false" title="Import from Excel"><span class="side-icon" aria-hidden="true">&#128229;</span><span class="side-label">Import from Excel</span></button>
+                </div>
+            </div>
+            <div class="menu-group" role="group" aria-labelledby="menuGroupAccount">
+                <h3 class="menu-group-title">
+                    <button class="menu-group-toggle" id="menuGroupAccount" aria-expanded="false" aria-controls="menuGroupAccountItems"><span class="menu-chevron" aria-hidden="true">&#9656;</span><span class="side-label">Account</span></button>
+                </h3>
+                <div class="menu-sub" id="menuGroupAccountItems">
+                    <button class="btn btn-secondary side-item" id="lockButton" title="Screen lock"><span class="side-icon" aria-hidden="true">&#128274;</span><span class="side-label">Screen lock</span></button>
+                    <button class="btn btn-secondary side-item" id="changePasswordButton" title="Change password"><span class="side-icon" aria-hidden="true">&#128273;</span><span class="side-label">Change password</span></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="brand">
+            <h1>Personal Financial Dashboard</h1>
+            <p id="dashboardDate">Loading...</p>
+        </div>
+    </header>
+
+    <!-- Under the header, above Coming up. Shown when the data is not safely backed up; clicking it opens the Backups popup -->
+    <div class="backup-banner hidden" id="backupBanner" role="alert"></div>
+
+    <!-- Coming up, under the header: Bills, Reminders and Recurring panels (bills due within a week, your reminders); an item opens that day in the Calendar -->
+    <div class="reminder-bar hidden" id="remindersBar" role="status"></div>
+
+    <div data-include="panels/workspace.html"></div>
+
+</div>
+
+<!-- Popups -->
+<div data-include="panels/setup-wizard.html"></div>
+<div data-include="panels/add-account.html"></div>
+<div data-include="panels/transaction-form.html"></div>
+<div data-include="panels/edit-account.html"></div>
+<div data-include="panels/emergency-fund-setup.html"></div>
+<div data-include="panels/person.html"></div>
+<div data-include="panels/password.html"></div>
+<div data-include="panels/backup.html"></div>
+<div data-include="panels/exchange-rates.html"></div>
+<div data-include="panels/note-form.html"></div>
+<div data-include="panels/reminder-form.html"></div>
+<div data-include="panels/budget-form.html"></div>
+<div data-include="panels/ledger-dialog.html"></div>
+
+<script type="module" src="js/app.js"></script>   <!-- app.js imports every other file; modules run after the page is parsed -->
+</body>
+</html>

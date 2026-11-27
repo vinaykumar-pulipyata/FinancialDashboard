@@ -1,0 +1,51 @@
+/* Income / Expense / Transfer form: per-operation colours and fields. */
+
+.modal.txn-income { --op: var(--green-fill); --op-tint: rgba(46,125,50,0.08); }
+
+.modal.txn-expense { --op: var(--red-fill); --op-tint: rgba(198,40,40,0.08); }
+
+.modal.txn-transfer { --op: var(--accent-fill); --op-tint: rgba(59,110,165,0.08); }
+
+.modal[class*="txn-"] .modal-header { background: var(--op); border-bottom: none; border-radius: 16px 16px 0 0; }
+
+.modal[class*="txn-"] .modal-header h2,
+.modal[class*="txn-"] .modal-close { color: #ffffff; }
+
+.modal[class*="txn-"] .btn-primary { background: var(--op); }
+
+.modal[class*="txn-"] .modal-body { background: var(--op-tint); }
+
+.modal[class*="txn-"] .txn-form input:focus,
+.modal[class*="txn-"] .txn-form select:focus,
+.modal[class*="txn-"] .txn-form textarea:focus { outline: 2px solid var(--op); border-color: var(--op); }
+
+.txn-form textarea { width: 100%; box-sizing: border-box; font-family: inherit; }
+
+.txn-inline > select, .txn-inline > input { width: auto; flex: 1; min-width: 0; }
+
+.txn-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+.txn-inline { display: flex; gap: 8px; align-items: center; }
+
+.txn-inline select, .txn-inline input { flex: 1; }
+
+.txn-form input, .txn-form select, .txn-form textarea {
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; background: var(--surface); color: var(--text); font-family: inherit;
+}
+
+.btn-delete { background: none; border: 1px solid var(--red); color: var(--red); }
+
+.btn-delete:hover { background: var(--red-fill); color: #fff; }
+
+.modal-footer .btn-delete { margin-right: 8px; }
+
+/* The tag box of the form: pills, a box to type more, and the Suggest button on one line. */
+.txn-tagbox { min-width: 0; }
+.txn-tagbox .tag-input { margin: 0; }
+.txn-tagbox .txn-link { margin-left: auto; white-space: nowrap; }
+.txn-tag-error { color: var(--red); font-size: 12px; margin-top: 4px; }
+.txn-tag-error:empty { display: none; }
+
+/* Income, Expense and Transfer share one width, 40% of the page (never narrower than 480px, so a small screen still has room). The Expense form carries the Split box. */
+.modal.txn-income, .modal.txn-expense, .modal.txn-transfer { width: 40%; min-width: min(480px, 100%); }

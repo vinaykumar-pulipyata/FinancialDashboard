@@ -1,0 +1,17 @@
+<div class="panel-head">
+    <h2 class="section-title">&#129534; Transactions</h2>
+    <div class="chips" id="txnFilters"></div>
+</div>
+<div class="txn-search">
+    <input type="search" id="txnSearch" placeholder="Search notes, descriptions, categories, accounts, people, amounts" autocomplete="off" aria-label="Search the transactions">
+    <select id="txnCategory" aria-label="Category"></select>
+    <select id="txnAccount" aria-label="Account"></select>
+    <input type="number" id="txnMin" min="0" step="any" placeholder="Min &#8377;" aria-label="Smallest amount">
+    <input type="number" id="txnMax" min="0" step="any" placeholder="Max &#8377;" aria-label="Largest amount">
+    <button class="chip hidden" id="txnClear" type="button">Clear</button>
+    <button class="chip" id="txnExport" type="button" title="Download the transactions shown, all pages, as a CSV file">&#11015;&#65039; Export CSV</button>
+</div>
+<div class="tag-row txn-tagbar hidden" id="txnTags" aria-label="Tags"></div>
+<div class="txn-found hidden" id="txnFound"></div>
+<div id="txnList"></div>
+<div class="pager hidden" id="txnPager"></div>

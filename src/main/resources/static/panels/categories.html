@@ -1,0 +1,12 @@
+<!-- CATEGORIES (a page, opened from the menu): add, rename, deactivate and delete categories and sub categories, income and expense apart -->
+<div class="panel-head">
+    <h2 class="section-title">&#127991;&#65039; Categories</h2>
+    <div class="chips" id="catTabs"></div>
+</div>
+<div class="cat-add">
+    <input type="text" id="catNewName" placeholder="New category name" autocomplete="off" maxlength="100">
+    <button class="btn btn-primary" id="catAddButton">+ Add category</button>
+</div>
+<div class="cat-error" id="categoriesError" role="alert"></div>
+<div class="cat-grid" id="catList"></div>
+<p class="cat-note">A category can have sub categories under it, and no more levels. A category with sub categories or transactions cannot be deleted: deactivate it to stop offering it in the forms. The number beside a name is how many transactions use it.</p>

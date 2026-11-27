@@ -1,0 +1,130 @@
+/* Modal popups and the shared form control look (dropdowns match text fields). */
+
+.modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.4);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 100;
+}
+
+.modal-overlay.hidden {
+
+    display: none;
+}
+
+.modal {
+
+    width: min(480px, 100%);
+
+    max-height: 86vh;
+
+    overflow-y: auto;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.modal-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+
+    margin: 0;
+
+    font-size: 17px;
+
+    color: var(--accent);
+}
+
+.modal-close {
+
+    background: none;
+
+    border: none;
+
+    color: var(--muted);
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    line-height: 1;
+}
+
+.modal-body {
+
+    padding: 18px 20px;
+}
+
+.modal-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 14px 20px;
+
+    border-top: 1px solid var(--border);
+}
+
+.modal-error {
+
+    color: var(--red);
+
+    font-size: 12px;
+
+    margin-right: auto;
+}
+
+/* Dropdowns match text fields: same width, height, border and font in every form. */
+
+/* Income | Expense | Transfer across the top of a new transaction; the one on show is filled. */
+.txn-kinds { padding: 14px 20px 12px; }   /* room above (under the title) and below (before the first field) */
+.txn-kinds .chip { flex: 1; padding: 7px 12px; font-size: 13px; }
+/* The same colours as the form and the list: green income, red expense, blue transfer. Outlined until chosen, then filled
+   (solid fills use the -fill colours so white text stays readable in both themes). */
+.txn-kinds .chip[data-kind=INCOME] { --kind: var(--green); --kind-fill: var(--green-fill); }
+.txn-kinds .chip[data-kind=EXPENSE] { --kind: var(--red); --kind-fill: var(--red-fill); }
+.txn-kinds .chip[data-kind=TRANSFER] { --kind: var(--accent); --kind-fill: var(--accent-fill); }
+.txn-kinds .chip { color: var(--kind); border-color: var(--kind); }
+.txn-kinds .chip:hover { background: color-mix(in srgb, var(--kind) 12%, transparent); }
+.txn-kinds .chip.active, .txn-kinds .chip.active:hover { background: var(--kind-fill); border-color: var(--kind-fill); color: #fff; }
+
+.txn-form input:not([type=checkbox]):not([type=radio]), .txn-form select,
+.wizard input:not([type=checkbox]):not([type=radio]), .wizard select {
+    width: 100%; height: 38px; box-sizing: border-box;
+    padding: 8px 10px; font-size: 14px; font-family: inherit; line-height: 1.2;
+    border: 1px solid var(--border); border-radius: 8px;
+    background-color: var(--surface); color: var(--text);
+}

@@ -1,0 +1,10 @@
+/* Ring-fencing: the offer once a goal fund reaches its target, and the locked state. */
+
+.fence-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
+    background: rgba(46, 125, 50, 0.08); font-size: 14px; }
+.fence-banner.locked { background: rgba(59, 110, 165, 0.08); }
+.fence-banner .fence-text { flex: 1; min-width: 200px; line-height: 1.5; }
+.fence-banner .fence-text strong { font-weight: 700; }
+
+.account-block .fence-banner { margin: -2px 0 10px; }

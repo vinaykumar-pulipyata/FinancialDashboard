@@ -1,0 +1,49 @@
+<!-- EMERGENCY FUND: set up the first time, change the settings afterwards -->
+<div class="modal-overlay hidden" id="efOverlay">
+    <div class="modal txn-transfer">
+        <div class="modal-header">
+            <h2 id="efTitle">Emergency Fund</h2>
+            <button class="modal-close" id="efClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <p class="edit-hint ef-about">A cushion for the unexpected, like job loss, medical bills or urgent repairs.
+                Keep it apart from everyday money. A common target is 3 to 6 months of your essential expenses.</p>
+
+            <div class="txn-field"><span>Account</span>
+                <select id="efAccount"></select>
+            </div>
+            <div class="txn-field" id="efOpeningRow"><span>Current balance (&#8377;)</span>
+                <input type="number" id="efOpening" min="0" step="any">
+            </div>
+
+            <div class="txn-field"><span>Target</span>
+                <div class="ef-radios">
+                    <label><input type="radio" name="efMode" value="MONTHS" checked> Months of expenses</label>
+                    <label><input type="radio" name="efMode" value="AMOUNT"> Fixed amount</label>
+                </div>
+            </div>
+            <div class="txn-field" id="efMonthsRow"><span>Months of essential expenses</span>
+                <input type="number" id="efMonths" min="1" step="1" value="6">
+            </div>
+            <div class="txn-field hidden" id="efAmountRow"><span>Target amount (&#8377;)</span>
+                <input type="number" id="efAmount" min="0" step="any">
+            </div>
+
+            <div class="txn-field"><span>Monthly essential expenses (&#8377;)</span>
+                <input type="number" id="efBurn" min="0" step="any">
+            </div>
+            <div class="edit-hint ef-field-hint">What you must pay each month even with no income: rent, food, bills, EMIs, insurance.
+                It gives your runway, the number of months the fund would last.</div>
+
+            <div class="txn-field"><span>Planned monthly contribution (&#8377;, optional)</span>
+                <input type="number" id="efPlanned" min="0" step="any">
+            </div>
+            <div class="edit-hint ef-field-hint">Leave it blank and the estimate uses the average you actually put in over the last 3 months.</div>
+        </div>
+        <div class="modal-footer">
+            <span class="modal-error" id="efError"></span>
+            <button class="btn btn-secondary" id="efCancel">Cancel</button>
+            <button class="btn btn-primary" id="efSave">Save</button>
+        </div>
+    </div>
+</div>

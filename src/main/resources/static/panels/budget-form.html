@@ -1,0 +1,24 @@
+<!-- BUDGET: set, change or remove a monthly limit -->
+<div class="modal-overlay hidden" id="budgetOverlay">
+    <div class="modal budget-modal">
+        <div class="modal-header">
+            <h2 id="budgetHeading">New budget</h2>
+            <button class="modal-close" id="budgetClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="txn-field"><span>For</span>
+                <select id="budgetCategory"></select>
+            </div>
+            <div class="txn-field"><span>Monthly limit (&#8377;)</span>
+                <input type="number" id="budgetAmount" min="0" step="0.01" inputmode="decimal" autocomplete="off">
+            </div>
+            <div class="reminder-hint">The same limit applies to every month. A main category's limit includes its sub categories; a sub category's counts only itself. Setting a limit for something that already has one replaces it.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-delete hidden" id="budgetDelete">Delete</button>
+            <span class="modal-error" id="budgetError"></span>
+            <button class="btn btn-secondary" id="budgetCancel">Cancel</button>
+            <button class="btn btn-primary" id="budgetSave">Save</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,225 @@
+/* Base: page layout, buttons, panels and shared small components. */
+
+:root {
+
+    color-scheme: light;
+
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --text: #1b2430;
+    --muted: #64748b;
+    --accent: #3b6ea5;
+    --border: rgba(30,41,59,0.12);
+    --green: #2e7d32;
+    --red: #c62828;
+    --yellow: #b58900;
+
+    /* The same colours as a solid background under white text. In the dark theme the text colours above get lighter
+       and these stay dark enough for the white text. */
+    --accent-fill: #3b6ea5;
+    --green-fill: #2e7d32;
+    --red-fill: #c62828;
+
+    /* Chart and track colours that must follow the theme. */
+    --series: #0a84ff;           /* the main line of a graph */
+    --series-div: #00a86b;       /* the dividends line */
+    --series-value: #ff5a1f;     /* a holding's current value on the Mutual Funds / Shares graphs (the same orange as the second chart slot) */
+    --series-invested: #0a84ff;  /* what was put in, dashed (the same blue as the first chart slot) */
+    --axis: rgba(30, 41, 59, 0.35);
+    --track-from: rgba(30, 41, 59, 0.11);
+    --track-to: rgba(30, 41, 59, 0.05);
+    --tint: rgba(15, 23, 42, 0.025);
+
+    /* The Calendar's heatmaps: five steps (none, very low, low, high, very high) and the text that stays readable on each. e = expenses (red), i = income (green). */
+    --heat-e0: #E5E7EB; --heat-e1: #FEE2E2; --heat-e2: #FCA5A5; --heat-e3: #DC2626; --heat-e4: #991B1B;
+    --heat-et0: #374151; --heat-et1: #7F1D1D; --heat-et2: #450A0A; --heat-et3: #FFFFFF; --heat-et4: #FFFFFF;
+    --heat-i0: #E5E7EB; --heat-i1: #DCFCE7; --heat-i2: #86EFAC; --heat-i3: #16A34A; --heat-i4: #166534;
+    --heat-it0: #374151; --heat-it1: #14532D; --heat-it2: #052E16; --heat-it3: #021A0D; --heat-it4: #FFFFFF;
+}
+
+/* The dark theme: set by theme.js (a saved choice, else the computer's setting). Text colours are lighter, surfaces are
+   dark, and the fills under white text keep the light theme's values. The chart colours are in charts.css. */
+:root[data-theme="dark"] {
+
+    color-scheme: dark;
+
+    --bg: #0f141a;
+    --surface: #171d26;
+    --text: #e6ebf2;
+    --muted: #9aa7b8;
+    --accent: #5b97dd;
+    --border: rgba(255, 255, 255, 0.14);
+    --green: #4caf50;
+    --red: #ef6b6b;
+    --yellow: #e6c04d;
+
+    --series: #2f8cf0;
+    --series-div: #16a87a;
+    --series-value: #e8652d;
+    --series-invested: #2f8cf0;
+    --axis: rgba(255, 255, 255, 0.35);
+    --track-from: rgba(255, 255, 255, 0.12);
+    --track-to: rgba(255, 255, 255, 0.06);
+    --tint: rgba(255, 255, 255, 0.04);
+
+    /* The same five steps on a dark page: still dim to strong, red and green, with readable text. */
+    --heat-e0: #2B3340; --heat-e1: #4A2328; --heat-e2: #7F2A31; --heat-e3: #DC2626; --heat-e4: #F87171;
+    --heat-et0: #D1D5DB; --heat-et1: #FECACA; --heat-et2: #FEE2E2; --heat-et3: #FFFFFF; --heat-et4: #450A0A;
+    --heat-i0: #2B3340; --heat-i1: #1F3D2A; --heat-i2: #2C6B43; --heat-i3: #22C55E; --heat-i4: #86EFAC;
+    --heat-it0: #D1D5DB; --heat-it1: #BBF7D0; --heat-it2: #DCFCE7; --heat-it3: #052E16; --heat-it4: #052E16;
+}
+
+body {
+
+    margin: 0;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.container {
+
+    width: min(1400px, 94%);
+
+    margin: auto;
+
+    padding: 30px 0 60px;
+}
+
+header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+    margin-bottom: 30px;
+}
+
+
+.brand h1 {
+
+    margin: 0;
+
+    font-size: clamp(26px, 4vw, 40px);
+
+    color: var(--accent);
+}
+
+.brand p {
+
+    margin: 7px 0 0;
+
+    font-size: 14px;
+
+    color: var(--muted);
+}
+
+section {
+
+    margin-bottom: 30px;
+}
+
+.panel {
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+.section-title {
+
+    color: var(--accent);
+
+    font-size: 18px;
+
+    margin: 0 0 14px;
+
+    letter-spacing: .3px;
+}
+
+.icon-btn {
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    opacity: 0.6;
+
+    padding: 0;
+
+    line-height: 1;
+}
+
+.icon-btn:hover {
+
+    opacity: 1;
+}
+
+.btn {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 16px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.btn-primary {
+
+    background: var(--accent-fill);
+
+    color: #ffffff;
+}
+
+.btn-secondary {
+
+    background: none;
+
+    border: 1px solid var(--border);
+
+    color: var(--text);
+}
+
+.panel-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+
+.panel-head .section-title { margin: 0; }
+
+
+.txn-link { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 12px; font-weight: 600; padding: 0; white-space: nowrap; }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.chip { border: 1px solid var(--border); background: none; border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted); }
+
+.chip.active { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+
+.empty-state { color: var(--muted); text-align: center; padding: 30px 0; }

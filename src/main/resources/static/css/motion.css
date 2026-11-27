@@ -1,0 +1,58 @@
+/* Motion: the shared timing, and the small animations that are not tied to one panel (dialogs, press feedback, rows
+   rising in). Everything that moves sits inside prefers-reduced-motion: no-preference, so nothing moves for a person who
+   asked for less. The chart and bar animations stay in their own files and use the same timing where they can. */
+
+:root {
+    --motion-fast: .12s;
+    --motion-base: .2s;
+    --motion-slow: .5s;
+    --ease-out: cubic-bezier(.2, .8, .2, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    /* A dialog (and the screen lock) fades in and the box settles up from slightly smaller. An overlay is shown by
+       taking off .hidden, which starts the animation again each time. */
+    .modal-overlay:not(.hidden) { animation: overlay-in var(--motion-base) ease-out; }
+    .modal-overlay:not(.hidden) .modal { animation: modal-in var(--motion-base) var(--ease-out); }
+
+    /* Press feedback: a button, chip or tile gives a little when it is pushed. */
+    .btn, .chip, .icon-btn, .txn-link { transition: transform var(--motion-fast) ease, background-color var(--motion-base) ease, opacity var(--motion-base) ease; }
+    .btn:active, .chip:active, .icon-btn:active, .txn-link:active { transform: scale(.96); }
+    .level-tile:active { transform: translateY(-1px) scale(.985); }
+
+    /* A row, card or tile that is new on the page rises in; a redraw leaves the ones already shown alone (growsOnce). */
+    .rise { animation: rise var(--motion-slow) var(--ease-out) both; }
+
+    /* The view that the card turns to settles in as it comes round (workspace.js replays .view-in on each change). */
+    .view-in { animation: view-in var(--motion-slow) var(--ease-out) both; animation-delay: .22s; }
+
+    /* The calendar grid slides in the way you moved; a chosen day lights up its ring. */
+    .cal-grid.slide-next { animation: slide-next var(--motion-base) var(--ease-out); }
+    .cal-grid.slide-prev { animation: slide-prev var(--motion-base) var(--ease-out); }
+    .cal-cell.selected { animation: cell-pick var(--motion-base) ease-out; }
+
+    /* A bar whose value changed slides from its old width (--from); a saved row is lit briefly; a deleted one folds away. */
+    .shift { animation: bar-shift .6s var(--ease-out); }
+    .txn-row.flash { animation: row-flash 1.4s ease-out; }
+    .collapse { overflow: hidden; pointer-events: none; animation: row-out .22s ease-in forwards; }
+
+    /* The Stats rings: a thin circle is drawn round first, then each category swells out of it in turn (--i is the slice's
+       place) and the labels fade in. It runs each time a ring is drawn or Stats is opened (workspace.js replays .sweep). */
+    .donut.sweep .donut-trace { animation: trace 1s ease-out; }
+    .donut.sweep .slice { animation: slice-pump .6s var(--ease-out) backwards; animation-delay: calc(.7s + var(--i, 0) * 90ms); }
+    .donut.sweep .pct, .donut.sweep .center-label, .donut.sweep .center-value { animation: overlay-in .4s ease-out backwards; animation-delay: 1.1s; }
+}
+
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes slice-pump { 0% { opacity: 0; stroke-width: 0; } 60% { opacity: 1; stroke-width: 28px; } 100% { stroke-width: 24px; } }
+@keyframes trace { 0% { stroke-dashoffset: 1; opacity: 1; } 70% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes view-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes slide-next { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes slide-prev { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes cell-pick { from { box-shadow: 0 0 0 0 var(--accent); } to { box-shadow: 0 0 0 2px var(--accent); } }
+@keyframes bar-shift { from { width: var(--from); } }
+@keyframes row-flash { from { background: color-mix(in srgb, var(--accent) 22%, transparent); } to { background: transparent; } }
+@keyframes row-out { from { max-height: 80px; } to { max-height: 0; opacity: 0; transform: translateX(24px); padding-top: 0; padding-bottom: 0; border-bottom-width: 0; } }

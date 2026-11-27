@@ -1,0 +1,91 @@
+/* Net worth over time: a line, bar or area chart with a point per month, across the full width, with a table view as its twin. */
+
+.nw-wrap { width: 100%; }
+.nw-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+.nw-view-options { margin: 0 0 10px; justify-content: flex-end; }   /* top right of the graph */
+.nw-view-options:has(#nwTypes.hidden):has(#nwTableToggle.hidden) { display: none; }
+.nw-options { margin-top: 12px; }
+.nw-eye { width: auto; font-size: 24px; opacity: 1; }
+.nw-summary { margin: 0 0 10px; line-height: 1.55; font-size: 14px; color: var(--muted); }
+.nw-summary:empty { display: none; }
+.nw-summary strong { color: var(--text); }
+.nw-summary .up { color: var(--green); font-weight: 700; }
+.nw-summary .down { color: var(--red); font-weight: 700; }
+.nw-yearline { stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 4; }
+.nw-years details { border-bottom: 1px solid var(--border); padding: 4px 0; }
+.nw-years summary { cursor: pointer; font-weight: 700; padding: 6px 2px; display: flex; justify-content: space-between; gap: 12px; }
+.nw-years summary .sub { font-weight: 400; color: var(--muted); font-size: 13px; }
+.nw-note { margin-top: 10px; line-height: 1.5; }
+
+.nw-grid { stroke: var(--border); stroke-width: 1; }
+.nw-base { stroke: var(--axis); stroke-width: 1; }
+.nw-tick { font-size: 11px; fill: var(--muted); text-anchor: end; }
+.nw-month { font-size: 11px; fill: var(--muted); text-anchor: middle; }
+.nw-year { font-size: 10px; fill: var(--muted); text-anchor: middle; }
+.nw-pill { fill: var(--accent-fill); }
+.nw-pill.neg { fill: var(--red-fill); }
+.nw-pill-text { font-size: 12px; font-weight: 700; fill: #ffffff; text-anchor: middle; }
+
+.nw-area { fill: url(#nwArea); }
+.nw-bar { fill: var(--series); }
+.nw-bar.neg { fill: var(--red); }
+.nw-col:hover .nw-bar, .nw-col:focus-within .nw-bar { opacity: .8; }
+.nw-line { fill: none; stroke: var(--series); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.nw-dot { fill: var(--series); stroke: var(--surface); stroke-width: 2; transition: transform .15s ease; transform-box: fill-box; transform-origin: center; }
+.nw-halo { fill: color-mix(in srgb, var(--accent) 18%, transparent); }
+
+/* Pointing at a month draws a vertical guide and enlarges its point. */
+.nw-cross { stroke: color-mix(in srgb, var(--accent) 45%, transparent); stroke-width: 1; opacity: 0; transition: opacity .12s ease; }
+.nw-col:hover .nw-cross, .nw-col:focus-within .nw-cross { opacity: 1; }
+.nw-col:hover .nw-dot, .nw-col:focus-within .nw-dot { transform: scale(1.35); }
+.nw-hit { fill: transparent; cursor: default; }
+.nw-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* The line draws itself in the first time it appears. */
+@media (prefers-reduced-motion: no-preference) {
+    .nw-line.grow { stroke-dasharray: 1; stroke-dashoffset: 1; animation: nw-draw 1s ease forwards; }
+    .nw-area.grow, .nw-dot.grow { animation: nw-fade .9s ease both; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    /* Columns rise from the zero line one after another; the dots pop in along the line (--i is the month's place). */
+    .nw-bar.grow { transform-box: fill-box; transform-origin: center bottom; animation: nw-rise .6s var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 35ms); }
+    .nw-bar.neg.grow { transform-origin: center top; }
+    .nw-dot.grow { animation-delay: calc(.6s + var(--i, 0) * 30ms); }
+}
+@keyframes nw-rise { from { transform: scaleY(0); opacity: 0; } }
+@keyframes nw-draw {
+    to { stroke-dashoffset: 0; }
+}
+@keyframes nw-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Where your assets are: the ring on the left, its table on the right; stacked on a narrow window. */
+.nw-values-note { margin: 6px 0 14px; max-width: 70ch; }
+/* The graph and the allocation donut are the two faces of one small card: the buttons above it turn it over. Both faces share
+   one grid cell, so the card is as tall as the taller face; the face that is turned away is inert (no clicks, no tabbing). */
+.nw-faces { margin: 4px 0 12px; }
+.nw-flip { perspective: 1600px; }
+.nw-flip-inner { display: grid; transform-style: preserve-3d; }
+.nw-face { grid-area: 1 / 1; min-width: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.nw-face.back { transform: rotateY(180deg); }
+@media (prefers-reduced-motion: no-preference) { .nw-flip-inner { transition: transform .6s ease; } }
+.nw-flip.flipped .nw-flip-inner { transform: rotateY(180deg); }
+.nw-allocation { padding-top: 4px; }
+.nw-allocation.hidden { display: none; }
+.alloc-body { display: grid; grid-template-columns: minmax(260px, 460px) 1fr; gap: 40px; align-items: center; }
+.alloc-ring { width: 100%; max-width: 460px; min-height: 260px; aspect-ratio: 1 / 1; margin: 0 auto; }
+.alloc-ring .donut { width: 100%; height: 100%; max-width: none; margin: 0; }
+.alloc-debt { margin-top: 10px; }
+/* The table is not the Stats table: no fixed columns, and it fills the space beside the donut. The kind names take what is left on the
+   left; Amount and Share are as wide as their content (width: 1%) with a gap before each, against the right edge, so a long amount
+   like ₹42,00,000 never touches the share beside it and the headings sit over their figures. */
+.nw-allocation .chart-table { table-layout: auto; width: 100%; font-size: 15px; }
+.nw-allocation .chart-table th:nth-child(2), .nw-allocation .chart-table th:nth-child(3) { width: 1%; }
+.nw-allocation .chart-table th, .nw-allocation .chart-table td { padding-left: 32px; padding-right: 0; white-space: nowrap; }
+.nw-allocation .chart-table td { padding-top: 12px; padding-bottom: 12px; }
+.nw-allocation .chart-table th:first-child, .nw-allocation .chart-table td:first-child { padding-left: 4px; white-space: normal; }
+.nw-allocation .chart-table th.num, .nw-allocation .chart-table td.num { text-align: right; }
+.nw-allocation .chart-table .swatch { width: 12px; height: 12px; }
+@media (max-width: 640px) { .alloc-body { grid-template-columns: 1fr; } }

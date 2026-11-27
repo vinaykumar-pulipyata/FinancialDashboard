@@ -1,0 +1,64 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Personal data: never commit it ###
+# H2 database files (the real one, the demo and the Money Manager import one), wherever they are
+data/
+*.mv.db
+*.trace.db
+*.lock.db
+# Backups of the database and the Excel exports (they hold everything, diary included)
+backups/
+backups-demo/
+backups-moneymanager/
+*.sql.zip
+*.xlsx
+# Logs (the app's own, and the Caddy proxy's under logs/caddy)
+logs/
+*.log
+# The Money Manager import's working folder: account and category maps, the plan and the rates, all taken from real data
+import-review/
+# Passwords and local settings
+.env
+.env.*
+.claude/settings.local.json
+
+### Local-only files ###
+__pycache__/
+*.pyc
+.DS_Store

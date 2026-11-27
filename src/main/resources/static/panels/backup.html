@@ -1,0 +1,34 @@
+<!-- BACKUPS: how safe the data is, a second folder for the copies, Back up now, and how to put a backup back -->
+<div class="modal-overlay hidden" id="backupOverlay">
+    <div class="modal backup-modal">
+        <div class="modal-header">
+            <h2>Backups</h2>
+            <button class="modal-close" id="backupClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body">
+            <div class="backup-state" id="backupState"></div>
+
+            <div class="txn-field"><span>Also copy every backup to this folder (iCloud Drive, Dropbox or a USB drive)</span>
+                <input type="text" id="backupCopyDir" placeholder="/Users/you/Dropbox/finance-backups" autocomplete="off">
+            </div>
+            <div class="backup-buttons">
+                <button class="btn btn-secondary" id="backupSaveFolder">Save folder</button>
+                <button class="btn btn-primary" id="backupNow">Back up now</button>
+            </div>
+
+            <h3 class="backup-sub">Recent backups</h3>
+            <div id="backupFiles"></div>
+
+            <div class="edit-hint backup-restore">
+                To put a backup back, close the app, then start it once with the backup named:
+                <code>financial-dashboard --restore=&lt;the backup file&gt;</code>
+                (from the project folder: <code>./gradlew bootRun --args='--restore=&lt;the backup file&gt;'</code>).
+                The data it replaces is kept next to the database, never deleted.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="modal-error" id="backupError"></span>
+            <button class="btn btn-secondary" id="backupDone">Close</button>
+        </div>
+    </div>
+</div>

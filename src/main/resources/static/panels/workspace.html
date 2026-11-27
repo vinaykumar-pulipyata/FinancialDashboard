@@ -1,0 +1,52 @@
+<!-- The views of the page. The buttons choose one; the card below turns over to show it. -->
+<section>
+    <div class="panel ws-tabs">
+        <button class="ws-tab active" data-view="calendar" aria-pressed="true">&#128197; Calendar</button>
+        <button class="ws-tab" data-view="transactions" aria-pressed="false">&#129534; Transactions</button>
+        <button class="ws-tab" data-view="budgets" aria-pressed="false">&#127919; Budgets</button>
+        <button class="ws-tab" data-view="insights" aria-pressed="false">&#128161; Spending Review</button>
+        <button class="ws-tab" data-view="stats" aria-pressed="false">&#128202; Stats</button>
+        <button class="ws-tab" data-view="accounts" aria-pressed="false">&#128188; Accounts</button>
+        <button class="ws-tab" data-view="networth" aria-pressed="false">&#128200; Net worth</button>
+    </div>
+</section>
+
+<section>
+    <div class="panel ws-card">
+        <!-- One date range (Today, From, To) for the Calendar, the transactions list, the Stats charts, the net worth line and the other line graphs -->
+        <div class="ws-range" id="wsRange">
+            <!-- Today, From, To and Clear are added here by js/panels/period-filter.js; the + stays last, on the right -->
+            <span class="cal-add-wrap">
+                <button class="btn btn-primary cal-add" id="calAdd" title="Add a transaction" aria-label="Add a transaction">+</button>
+            </span>
+        </div>
+
+        <div class="flip-card" id="wsFlip">
+            <div class="flip-inner">
+                <!-- Front, shown first: the calendar -->
+                <div class="flip-face front" id="wsFaceA">
+                    <div id="calendarView"><div data-include="panels/calendar.html"></div></div>
+                </div>
+                <!-- Back, empty until a view is chosen. The other views wait in the holder below and move in here. -->
+                <div class="flip-face back collapsed" id="wsFaceB"></div>
+            </div>
+        </div>
+
+        <div class="hidden" id="wsHolder">
+            <div id="txnView"><div data-include="panels/transactions.html"></div></div>
+            <div id="statsView"><div data-include="panels/charts.html"></div></div>
+            <div id="budgetsView"><div data-include="panels/budgets.html"></div></div>
+            <div id="insightsView"><div data-include="panels/insights.html"></div></div>
+            <div id="accountsView"><div data-include="panels/accounts.html"></div></div>
+            <div id="levelView">
+                <button class="btn btn-secondary level-back" id="levelBack" type="button">&lsaquo; All levels</button>
+                <div id="levelBody"></div>
+            </div>
+            <div id="networthView"><div data-include="panels/net-worth.html"></div></div>
+            <div id="notesView"><div data-include="panels/notes.html"></div></div>
+            <div id="remindersView"><div data-include="panels/reminders-view.html"></div></div>
+            <div id="categoriesView"><div data-include="panels/categories.html"></div></div>
+            <div id="importView"><div data-include="panels/import.html"></div></div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,32 @@
+<!-- REMINDER: add or edit one reminder -->
+<div class="modal-overlay hidden" id="reminderOverlay">
+    <div class="modal reminder-modal">
+        <div class="modal-header">
+            <h2 id="reminderHeading">New reminder</h2>
+            <button class="modal-close" id="reminderClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="txn-field"><span>Day</span>
+                <input type="date" id="reminderDate">
+            </div>
+            <div class="txn-field"><span>What to remember</span>
+                <input type="text" id="reminderText" maxlength="200" autocomplete="off">
+            </div>
+            <div class="txn-field"><span>Repeat</span>
+                <select id="reminderRepeat">
+                    <option value="NONE">Doesn't repeat</option>
+                    <option value="WEEKLY">Every week</option>
+                    <option value="MONTHLY">Every month</option>
+                    <option value="YEARLY">Every year</option>
+                </select>
+            </div>
+            <div class="reminder-hint">For something that repeats, choose its first day above (a birth date, the first rent day). It then comes back by itself, is never ticked or late, and shows in the Coming up bar from 7 days before.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-delete hidden" id="reminderDelete">Delete</button>
+            <span class="modal-error" id="reminderError"></span>
+            <button class="btn btn-secondary" id="reminderCancel">Cancel</button>
+            <button class="btn btn-primary" id="reminderSave">Save</button>
+        </div>
+    </div>
+</div>

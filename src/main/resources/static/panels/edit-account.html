@@ -1,0 +1,50 @@
+<!-- EDIT ACCOUNT: opened from the Edit button on an account's own row. Change its name and opening balance, reset its balance to zero, deactivate (or activate) it, or delete it -->
+<div class="modal-overlay hidden" id="editAccountOverlay">
+    <div class="modal txn-transfer">
+        <div class="modal-header">
+            <h2 id="editAccountTitle">Edit account</h2>
+            <button class="modal-close" id="editAccountClose" title="Close">&#10005;</button>
+        </div>
+        <div class="modal-body txn-form">
+            <div class="txn-field"><span>Name</span>
+                <input type="text" id="editAccountName" maxlength="100" autocomplete="off">
+            </div>
+            <div class="txn-field"><span id="editOpeningLabel">Opening balance (&#8377;)</span>
+                <input type="number" id="editOpening" min="0" step="any">
+            </div>
+            <div class="txn-field hidden" id="editPlateRow"><span>Number plate</span>
+                <input type="text" id="editPlate" maxlength="20" autocomplete="off" placeholder="MH12 AB 1234">
+            </div>
+            <div class="txn-field hidden" id="editYearRow"><span>Year bought</span>
+                <input type="number" id="editYear" min="1900" step="1" placeholder="2019">
+            </div>
+            <div class="txn-field hidden" id="editLimitRow"><span>Credit limit (&#8377;)</span>
+                <input type="number" id="editLimit" min="0" step="any">
+            </div>
+            <div class="txn-field hidden" id="editStatementRow"><span>Statement (bill) generated on day of the month (optional)</span>
+                <input type="number" id="editStatement" min="1" max="31" step="1" placeholder="5">
+            </div>
+            <div class="txn-field hidden" id="editDueRow"><span>Bill due on day of the month (optional)</span>
+                <input type="number" id="editDue" min="1" max="31" step="1" placeholder="21">
+            </div>
+            <div class="txn-field hidden" id="editPlanRow"><span>How is it paid?</span>
+                <select id="editPlan">
+                    <option value="FIXED">Fixed: the same EMI every month</option>
+                    <option value="CUSTOM">Custom: any amount, any time</option>
+                </select>
+            </div>
+            <div class="txn-field hidden" id="editEmiRow"><span>Monthly EMI (&#8377;) *</span>
+                <input type="number" id="editEmi" min="0" step="any">
+            </div>
+            <div class="edit-hint" id="editAccountHint"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-delete" id="editAccountDelete">Delete</button>
+            <span class="modal-error" id="editAccountError"></span>
+            <button class="btn btn-secondary" id="editAccountReset" title="Bring the balance to zero, with a note of what happened to the money">Reset balance</button>
+            <button class="btn btn-secondary" id="editAccountToggle">Deactivate</button>
+            <button class="btn btn-secondary" id="editAccountCancel">Cancel</button>
+            <button class="btn btn-primary" id="editAccountSave">Save</button>
+        </div>
+    </div>
+</div>

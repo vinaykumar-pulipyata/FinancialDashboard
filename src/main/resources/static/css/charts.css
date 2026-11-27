@@ -1,0 +1,148 @@
+/* Charts (back of the Transactions card): a donut per kind with a table that doubles as the legend. */
+
+.chart-note { font-size: 12px; color: var(--muted); }
+
+.charts-grid { display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 22px; }
+
+/* Twelve categorical slots (the first five are the validated bright ones, the other seven were added so no category needs folding
+   into "Other"), plus a neutral for transactions with no category. Colour follows the category.
+   Checked with the dataviz palette validator (light surface): lightness band, chroma, colour-blind
+   separation and normal-vision separation all pass. Contrast against white is below 3:1 for some
+   slots, which the validator flags as needing visible labels or a table view; both are provided. */
+.chart-card, .nw-allocation {   /* the Net worth ring uses the same slots, so it must define them too: it is not inside a .chart-card */
+    --s0: #0a84ff; --s1: #ff5a1f; --s2: #00c389; --s3: #f49c00; --s4: #ff4fa3; --s5: #8e5bd9; --s6: #17a2b8; --s7: #5f9e00; --s8: #a8643a; --s9: #e03a3a; --s10: #4f5bd5; --s11: #5d6b7e; --so: #a8a7a0;
+    min-width: 0;
+}
+
+.chart-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 18px 12px; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+.chart-title { margin: 0 0 2px; font-size: 16px; font-weight: 700; }
+
+.chart-sub { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+.donut { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto 16px; overflow: visible; }
+
+/* The ring is a thick stroked arc with rounded ends. Hovering a slice (or its table row) swells it and softens the rest. */
+.donut .slice {
+    fill: none; stroke-width: 24; stroke-linecap: round; cursor: default;
+    transition: stroke-width .15s ease, opacity .15s ease;
+}
+.donut .slice.flat { stroke-linecap: butt; }
+.donut .slice.s0 { stroke: var(--s0); }
+.donut .slice.s1 { stroke: var(--s1); }
+.donut .slice.s2 { stroke: var(--s2); }
+.donut .slice.s3 { stroke: var(--s3); }
+.donut .slice.s4 { stroke: var(--s4); }
+.donut .slice.s5 { stroke: var(--s5); }
+.donut .slice.s6 { stroke: var(--s6); }
+.donut .slice.s7 { stroke: var(--s7); }
+.donut .slice.s8 { stroke: var(--s8); }
+.donut .slice.s9 { stroke: var(--s9); }
+.donut .slice.s10 { stroke: var(--s10); }
+.donut .slice.s11 { stroke: var(--s11); }
+.donut .slice.so { stroke: var(--so); }
+.donut .slice:focus { outline: none; }
+.donut.has-active .slice { opacity: .35; }
+.donut.has-active .slice.active { opacity: 1; stroke-width: 30; }
+
+/* The thin circle that is drawn round before the slices swell (only visible while it animates; see motion.css). */
+.donut .donut-trace { fill: none; stroke: var(--axis); stroke-width: 2; stroke-dasharray: 1; opacity: 0;
+    transform: rotate(-90deg); transform-box: fill-box; transform-origin: center; pointer-events: none; }
+
+.donut .pct { font-size: 12px; fill: var(--muted); }
+.donut .center-label { font-size: 12px; fill: var(--muted); text-anchor: middle; }
+.donut .center-value { font-size: 22px; font-weight: 700; fill: var(--text); text-anchor: middle; }
+
+.chart-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+.chart-table th:nth-child(2) { width: 96px; }
+.chart-table th:nth-child(3) { width: 60px; }
+.chart-table td:first-child { overflow-wrap: anywhere; }
+.chart-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); padding: 4px 4px; border-bottom: 1px solid var(--border); }
+.chart-table th.num, .chart-table td.num { text-align: right; }
+.chart-table td { padding: 7px 4px; border-bottom: 1px solid var(--border); transition: background .12s ease; }
+.chart-table tfoot td { font-weight: 700; border-bottom: none; }
+.chart-table .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
+.chart-table tr.row-active td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.chart-table .swatch.s0 { background: var(--s0); }
+.chart-table .swatch.s1 { background: var(--s1); }
+.chart-table .swatch.s2 { background: var(--s2); }
+.chart-table .swatch.s3 { background: var(--s3); }
+.chart-table .swatch.s4 { background: var(--s4); }
+.chart-table .swatch.s5 { background: var(--s5); }
+.chart-table .swatch.s6 { background: var(--s6); }
+.chart-table .swatch.s7 { background: var(--s7); }
+.chart-table .swatch.s8 { background: var(--s8); }
+.chart-table .swatch.s9 { background: var(--s9); }
+.chart-table .swatch.s10 { background: var(--s10); }
+.chart-table .swatch.s11 { background: var(--s11); }
+.chart-table .swatch.so { background: var(--so); }
+
+.chart-tip {
+    position: fixed; z-index: 200; pointer-events: none; max-width: 240px;
+    background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); font-size: 12px;
+}
+.chart-tip .tip-value { font-size: 15px; font-weight: 700; }
+.chart-tip .tip-name { color: var(--muted); margin-top: 2px; }
+
+/* Click a category row and its month-by-month line graph takes the donut's place, with a Back button top left. */
+.chart-table tr.cat-row.selected td { background: color-mix(in srgb, var(--accent) 10%, transparent); font-weight: 600; }
+.cat-back {
+    display: inline-block; margin: -4px 0 8px -6px; padding: 4px 10px; border: none; background: none;
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; border-radius: 8px;
+}
+.cat-back:hover, .cat-back:focus-visible { background: color-mix(in srgb, var(--accent) 10%, transparent); outline: none; }
+/* "cat-row" is also the flex row of the Edit categories dialog (categories.css). A table row must stay a table row, or its cells
+   shrink to their content with an 8px gap and no longer line up under the headings. */
+.chart-table tr.cat-row { display: table-row; padding: 0; gap: 0; border-bottom: 0; cursor: pointer; }
+.chart-table tr.cat-row:focus-visible { outline: 2px solid var(--s0); outline-offset: -2px; }
+
+.cat-bars { --bar: var(--s0); display: block; width: 100%; max-width: 100%; overflow: hidden; }
+.cat-bars.s1 { --bar: var(--s1); }
+.cat-bars.s2 { --bar: var(--s2); }
+.cat-bars.s3 { --bar: var(--s3); }
+.cat-bars.s4 { --bar: var(--s4); }
+.cat-bars.s5 { --bar: var(--s5); }
+.cat-bars.s6 { --bar: var(--s6); }
+.cat-bars.s7 { --bar: var(--s7); }
+.cat-bars.s8 { --bar: var(--s8); }
+.cat-bars.s9 { --bar: var(--s9); }
+.cat-bars.s10 { --bar: var(--s10); }
+.cat-bars.s11 { --bar: var(--s11); }
+.cat-bars.so { --bar: var(--so); }
+.cat-caption { font-size: 12px; color: var(--muted); padding: 6px 2px 0; }
+.cat-chart { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; overflow: visible; }
+.cat-base { stroke: var(--border); stroke-width: 1; }
+.cat-area { fill: var(--bar); opacity: .12; }
+.cat-line { fill: none; stroke: var(--bar); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.cat-dot { fill: var(--bar); stroke: var(--surface); stroke-width: 2; transition: transform .12s ease; transform-box: fill-box; transform-origin: center; }
+.cat-cross { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0; }
+.cat-value { font-size: 11px; fill: var(--text); text-anchor: middle; }
+.cat-month { font-size: 11px; fill: var(--muted); text-anchor: middle; }
+.cat-hit { fill: transparent; }
+.cat-col { outline: none; cursor: default; }
+.cat-col:hover .cat-cross, .cat-col:focus .cat-cross { opacity: .6; }
+.cat-col:hover .cat-dot, .cat-col:focus .cat-dot { transform: scale(1.35); }
+@media (prefers-reduced-motion: no-preference) {
+    .cat-line.grow { stroke-dasharray: 1; animation: cat-draw .7s ease-out; }
+    .cat-area.grow { animation: cat-fade .7s ease-out; }
+    @keyframes cat-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+    @keyframes cat-fade { from { opacity: 0; } to { opacity: .12; } }
+}
+.cat-year { font-size: 10px; fill: var(--muted); opacity: .8; text-anchor: middle; }
+
+/* The Stats period: Weekly / Monthly / Annually / Period, then the arrows and name or the From and To boxes. */
+.stats-period { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.stats-period .chip.active { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+.stats-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.stats-nav label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.stats-label { min-width: 150px; text-align: center; font-size: 14px; }
+
+/* Dark theme: the same five hues stepped for the dark surface (#171d26). The dataviz validator passes all of its checks for
+   these five in order (lightness band, chroma, colour-blind separation, normal-vision separation, contrast >= 3:1). */
+:root[data-theme="dark"] { --s0: #2f8cf0; --s1: #e8652d; --s2: #16a87a; --s3: #bf8300; --s4: #e0599a; --s5: #9a6fe0; --s6: #1f9db3; --s7: #7aa81a; --s8: #b0764a; --s9: #e0504f; --s10: #6a74e0; --s11: #7a889b; --so: #8a8a85; }
+/* The Net worth ring defines the slots on itself (like .chart-card above), so in dark it needs the dark steps on itself too. */
+:root[data-theme="dark"] .nw-allocation { --s0: #2f8cf0; --s1: #e8652d; --s2: #16a87a; --s3: #bf8300; --s4: #e0599a; --s5: #9a6fe0; --s6: #1f9db3; --s7: #7aa81a; --s8: #b0764a; --s9: #e0504f; --s10: #6a74e0; --s11: #7a889b; --so: #8a8a85; }

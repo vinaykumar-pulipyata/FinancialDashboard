@@ -1,0 +1,43 @@
+/* The side menu: a collapsible sidebar on the left. Open, it shows an icon and a label for each action, in groups; collapsed, it is a
+   narrow bar with only the ☰ button. header-menu.js sets data-sidebar="open" or "collapsed" on <html>; the page
+   makes room for it with --sidebar-w, so nothing hides behind it. Open, it lists the groups (Organiser, Categories, ...); pointing at a
+   group (or tabbing into it, or clicking it on a touch screen) opens a flyout beside it with the group's items. */
+
+:root { --sidebar-w: 224px; }
+:root[data-sidebar="collapsed"] { --sidebar-w: 56px; }
+
+.side-menu { position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; width: var(--sidebar-w); display: flex; flex-direction: column;
+    padding: 18px 8px; box-sizing: border-box; background: var(--surface); border-right: 1px solid var(--border); }
+.side-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.side-top #menuButton { flex: none; width: 40px; height: 40px; padding: 0; font-size: 18px; line-height: 1; }
+.side-title { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.side-items { display: flex; flex-direction: column; }
+.menu-group { position: relative; display: flex; flex-direction: column; padding-top: 8px; margin-top: 8px; border-top: 1px solid var(--border); }
+.menu-group-title { margin: 0; font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; }
+/* a group is a parent item: its name with a ▸ that says its items open beside it */
+.menu-group-toggle { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 6px; background: none; border: 0; border-radius: 8px; cursor: pointer;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; text-align: left; }
+.menu-group-toggle:hover, .menu-group:hover .menu-group-toggle, .menu-group:focus-within .menu-group-toggle { background: var(--tint); }
+.menu-group:has(.menu-view[aria-pressed="true"]) .menu-group-toggle { color: var(--accent); }   /* an Organiser view is on show */
+.menu-chevron { flex: none; width: 14px; text-align: center; font-size: 12px; order: 2; margin-left: auto; }
+.menu-sub { display: none; position: absolute; top: 4px; left: calc(100% + 8px); z-index: 60; flex-direction: column; gap: 4px; min-width: 210px; padding: 8px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+/* a strip over the gap between the sidebar and the flyout, so moving the pointer across does not close it */
+.menu-sub::before { content: ""; position: absolute; top: 0; bottom: 0; left: -12px; width: 12px; }
+.menu-group:hover > .menu-sub, .menu-group:focus-within > .menu-sub, .menu-sub.pinned { display: flex; }
+.menu-group.dismissed > .menu-sub { display: none; }   /* just after choosing an item; until the pointer leaves the group */
+.side-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 10px; text-align: left; white-space: nowrap; }
+.side-icon { flex: none; width: 20px; text-align: center; font-size: 16px; }
+.side-item[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
+
+/* collapsed: only the ☰ button is left, in a slim bar; the title, the groups and every action are hidden until it is opened again */
+:root[data-sidebar="collapsed"] .side-items, :root[data-sidebar="collapsed"] .side-label { display: none; }
+:root[data-sidebar="collapsed"] .side-top { justify-content: center; margin-bottom: 0; }
+
+/* keep the page clear of the sidebar */
+body { padding-left: var(--sidebar-w); }
+
+@media (prefers-reduced-motion: no-preference) {
+    .side-menu { transition: width var(--motion-base, 200ms) var(--ease-out, ease-out); }
+    body { transition: padding-left var(--motion-base, 200ms) var(--ease-out, ease-out); }
+}

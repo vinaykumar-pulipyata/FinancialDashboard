@@ -1,0 +1,43 @@
+/* Spending Review view: a month with ‹ › and the panels under it. */
+
+.ins-nav { display: flex; align-items: center; gap: 10px; }
+.ins-nav strong { width: 14rem; text-align: center; white-space: nowrap; }   /* a fixed width: the ‹ › stay put whatever the month's name */
+.ins-section { margin-bottom: 18px; }
+.ins-section h3 { margin: 0 0 8px; font-size: 15px; }
+.ins-big { padding: 12px 14px; border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 8px; background: var(--tint); }
+.ins-big-amount { font-size: 22px; font-weight: 600; color: var(--red); }
+.ins-big-what { margin-top: 4px; font-size: 14px; }
+.ins-big-when { margin-top: 2px; font-size: 13px; color: var(--muted); }
+.ins-empty, .ins-note { color: var(--muted); font-size: 13px; }
+.ins-sub { margin-bottom: 12px; }
+.ins-sub h4 { margin: 0 0 6px; font-size: 14px; }
+.ins-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ins-item { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--tint); font-size: 14px; }
+.ins-item.up { border-left: 4px solid var(--red); }
+.ins-item.down { border-left: 4px solid var(--green); }
+.ins-item.tip { border-left: 4px solid var(--accent); }
+.ins-row { display: flex; gap: 16px; margin-bottom: 18px; }
+.ins-card { box-sizing: border-box; width: calc(50% - 8px); padding: 12px 5%; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(160deg, color-mix(in srgb, #fff 25%, var(--tint)), var(--tint)); box-shadow: 0 1px 4px color-mix(in srgb, #000 10%, transparent); }
+.ins-card h3 { margin: 0 0 4px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ins-card-big { border-left: 4px solid var(--red); }
+.ins-card-count { border-left: 4px solid var(--accent); }
+.ins-icon { margin-right: 4px; letter-spacing: 0; }
+.ins-card .ins-big { padding: 0; border: 0; background: none; }
+.ins-count { font-size: 26px; font-weight: 700; line-height: 1.2; }
+.ins-observations { padding: 14px; border: 1px solid var(--border); border-radius: 8px; }
+.ins-obs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ins-obs-grid .ins-sub { margin: 0; padding: 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, #fff 35%, transparent); background: linear-gradient(160deg, color-mix(in srgb, #fff 30%, var(--tint)), var(--tint)); box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 60%, transparent), 0 2px 6px color-mix(in srgb, #000 15%, transparent); }
+@media (max-width: 800px) { .ins-obs-grid { grid-template-columns: 1fr; } .ins-row { flex-direction: column; } .ins-card { width: 100%; } }
+.ins-obs-grid .ins-sub-up { background: linear-gradient(160deg, color-mix(in srgb, #fff 35%, color-mix(in srgb, var(--red) 40%, var(--tint))), color-mix(in srgb, var(--red) 40%, var(--tint)) 55%, color-mix(in srgb, var(--red) 55%, var(--tint))); }
+.ins-obs-grid .ins-sub-down { background: linear-gradient(160deg, color-mix(in srgb, #fff 35%, color-mix(in srgb, var(--green) 40%, var(--tint))), color-mix(in srgb, var(--green) 40%, var(--tint)) 55%, color-mix(in srgb, var(--green) 55%, var(--tint))); }
+.ins-obs-grid .ins-sub-tip { background: linear-gradient(160deg, color-mix(in srgb, #fff 35%, color-mix(in srgb, var(--accent) 40%, var(--tint))), color-mix(in srgb, var(--accent) 40%, var(--tint)) 55%, color-mix(in srgb, var(--accent) 55%, var(--tint))); }
+
+.ins-card .ins-big-amount { font-size: 26px; font-weight: 700; line-height: 1.2; }
+.ins-card .ins-big-what, .ins-card .ins-big-when { display: inline; margin: 0; }
+.ins-card .ins-big-when::before { content: " \00b7 "; }
+.ins-count-detail { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ins-chip { padding: 2px 8px; border-radius: 999px; font-size: 12px; background: var(--tint); border: 1px solid var(--border); }
+.ins-chip.out { border-color: var(--red); }
+.ins-chip.in { border-color: var(--green); }
+.ins-chip.move { border-color: var(--accent); }
+.ins-count-line { flex-basis: 100%; font-size: 13px; color: var(--muted); }

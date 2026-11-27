@@ -1,0 +1,11 @@
+.import-note { max-width: 780px; line-height: 1.5; }
+.import-pick { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+.import-error { color: var(--red); min-height: 1.2em; margin-bottom: 8px; }
+.import-table { border-collapse: collapse; margin: 8px 0 12px; min-width: 420px; }
+.import-table th, .import-table td { text-align: left; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--border); }
+.import-table .num { text-align: right; }
+.import-messages { margin: 4px 0 12px 18px; color: var(--muted); font-size: 13px; }
+.import-done { font-weight: 600; margin: 8px 0; }
+.import-progress { max-width: 520px; margin: 8px 0 12px; }
+.import-progress .usage-bar { margin-bottom: 6px; }
+.import-open { margin: 8px 0 12px; }

@@ -1,0 +1,38 @@
+/* Jewellery card: items grouped by kind (Gold, Silver, ...). */
+
+.jw-group { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 14px; padding: 6px 4px; border-bottom: 2px solid var(--border); font-weight: 700; }
+
+.jw-total { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+.jw-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 10px 4px; border-bottom: 1px solid var(--border); font-size: 14px; }
+
+.jw-left { min-width: 0; }
+
+.jw-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.jw-right { text-align: right; white-space: nowrap; }
+
+.jw-price { font-weight: 700; }
+
+.jw-actions { display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 4px; }
+
+/* One colour per kind. It tints the dot, the group's rule and the stripe down the pieces, never the text, so text keeps its
+   contrast in both themes. A kind with no colour of its own (jw-other) uses the muted grey. */
+.jw-gold { --jw: #d4a017; }
+.jw-silver { --jw: #9aa5b1; }
+.jw-platinum { --jw: #6f8fa8; }
+.jw-diamond { --jw: #2bbcd9; }
+.jw-other { --jw: var(--muted); }
+
+:root[data-theme="dark"] .jw-gold { --jw: #e6b94a; }
+:root[data-theme="dark"] .jw-silver { --jw: #c3ccd6; }
+:root[data-theme="dark"] .jw-platinum { --jw: #8fb0c8; }
+:root[data-theme="dark"] .jw-diamond { --jw: #5ad6ec; }
+
+.jw-dot { display: inline-block; width: 9px; height: 9px; margin-right: 5px; border-radius: 50%; background: var(--jw); }
+
+.jw-kind .jw-group { border-bottom-color: var(--jw); background: linear-gradient(90deg, color-mix(in srgb, var(--jw) 18%, transparent), transparent 70%); }
+
+.jw-kind .jw-metal::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; background: var(--jw); }
+
+.jw-kind .jw-item { border-left: 3px solid var(--jw); padding-left: 10px; }

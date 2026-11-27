@@ -1,0 +1,29 @@
+/* Emergency Fund card (top of the Goals level) and its setup popup. */
+
+.ef-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; background: var(--surface); }
+
+.ef-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.ef-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
+.ef-head .info-tooltip { width: 280px; }
+
+.ef-progress-text { font-size: 13px; color: var(--muted); margin: 6px 0 14px; }
+
+.ef-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+.ef-tile .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+.ef-tile .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+.ef-tile .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.ef-status { display: inline-flex; align-items: center; gap: 6px; }
+.ef-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--muted); }
+.ef-dot.low { background: var(--red); }
+.ef-dot.mid { background: var(--yellow); }
+.ef-dot.good { background: var(--green); }
+
+.ef-empty p { margin: 0 0 10px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.ef-empty ul { margin: 0 0 14px; padding-left: 20px; font-size: 14px; line-height: 1.7; }
+
+.ef-radios { display: flex; gap: 18px; flex-wrap: wrap; }
+.ef-radios label { display: flex; flex-direction: row; align-items: center; gap: 6px; font-size: 13px; color: var(--text); margin: 0; }
+
+.ef-about { margin: 0 0 14px; }
+.ef-field-hint { margin: -6px 0 14px; font-size: 12px; }
