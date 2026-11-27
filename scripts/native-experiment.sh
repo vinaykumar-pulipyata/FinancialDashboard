@@ -7,9 +7,16 @@
 set -u
 cd "$(dirname "$0")/.."
 
-GRAAL="${GRAALVM_HOME:-$HOME/Library/Java/JavaVirtualMachines/graalvm-jdk-24.0.2/Contents/Home}"
-[ -x "$GRAAL/bin/native-image" ] || { echo "No GraalVM with native-image at $GRAAL (set GRAALVM_HOME)"; exit 2; }
+# Spring Boot 4 writes its native-image metadata in the format of GraalVM 25 (GraalVM 24 stops with "Missing attribute(s) [glob]"),
+# so this wants GraalVM 25 or newer: the newest graalvm-jdk-NN in ~/Library/Java/JavaVirtualMachines, or GRAALVM_HOME.
+GRAAL="${GRAALVM_HOME:-}"
+if [ -z "$GRAAL" ]; then
+    GRAAL="$(ls -d "$HOME"/Library/Java/JavaVirtualMachines/graalvm-jdk-2[5-9]*/Contents/Home 2>/dev/null | sort -V | tail -1)"
+fi
+[ -n "$GRAAL" ] && [ -x "$GRAAL/bin/native-image" ] || { echo "No GraalVM 25+ with native-image found. Install Oracle GraalVM 25 (see docs) or set GRAALVM_HOME."; exit 2; }
 export JAVA_HOME="$GRAAL"
+JAVA_MAJOR="$("$GRAAL/bin/java" -version 2>&1 | sed -n 's/.*version "\([0-9]*\).*/\1/p' | head -1)"
+echo "Using GraalVM $JAVA_MAJOR at $GRAAL"
 BIN="build/native/nativeCompile/FinancialDashboard"
 PORT=8099
 URL="http://127.0.0.1:$PORT"
@@ -17,7 +24,7 @@ PASS_WORD="native-test-pw-1"
 
 if [ "${1:-}" = "--rebuild" ] || [ ! -x "$BIN" ]; then
     echo "== Building the native executable (this takes several minutes) =="
-    ./gradlew nativeCompile -PjavaVersion=24 -x test -x jsTest || { echo "BUILD FAILED"; exit 1; }
+    ./gradlew nativeCompile -PjavaVersion=$JAVA_MAJOR -x test -x jsTest || { echo "BUILD FAILED"; exit 1; }
 fi
 BIN="$(pwd)/$BIN"
 ls -lh "$BIN" | awk '{print "Executable size: " $5}'

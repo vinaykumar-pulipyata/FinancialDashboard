@@ -12,7 +12,7 @@ description = 'FinancialDashboard'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of((findProperty('javaVersion') ?: '17') as int)   // -PjavaVersion=24 for a GraalVM 24 build
+        languageVersion = JavaLanguageVersion.of((findProperty('javaVersion') ?: '17') as int)   // -PjavaVersion=25 for a GraalVM 25 build
     }
 }
 
