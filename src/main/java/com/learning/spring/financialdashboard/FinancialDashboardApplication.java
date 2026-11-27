@@ -21,8 +21,5 @@ public class FinancialDashboardApplication {
         }
         app.run(args);
     }
-        BackupRestorer.restoreIfRequested(args);   // --restore=FILE puts a backup back before the database is opened
-        SpringApplication.run(FinancialDashboardApplication.class, args);
-    }
 
 }
