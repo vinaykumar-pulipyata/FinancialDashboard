@@ -1,0 +1,97 @@
+# Release: runs only when a version tag is pushed (git tag v0.1.0 && git push origin v0.1.0).
+# It tests the code once, then builds the native executable on each system (a GraalVM native image can only be built on the system it is
+# for), runs the same smoke test on every one of them, and attaches the executables to a GitHub Release.
+# A tag with a hyphen (v0.1.0-rc1) is published as a pre-release, so the whole run can be tried before the real one.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write            # create the release and upload the files to it
+
+jobs:
+  verify:
+    name: Tests and jar
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build and test
+        run: ./gradlew build --stacktrace
+
+  native:
+    name: ${{ matrix.asset }}
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false       # one system failing should not sink the others
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset: financial-dashboard-linux-x64
+            binary: build/native/nativeCompile/FinancialDashboard
+          - os: ubuntu-24.04-arm
+            asset: financial-dashboard-linux-arm64
+            binary: build/native/nativeCompile/FinancialDashboard
+          - os: macos-15              # Apple silicon; the Intel macOS runners are left out on purpose
+            asset: financial-dashboard-macos-arm64
+            binary: build/native/nativeCompile/FinancialDashboard
+          - os: windows-latest
+            asset: financial-dashboard-windows-x64.exe
+            binary: build/native/nativeCompile/FinancialDashboard.exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Spring Boot 4 writes its native-image metadata in the format of GraalVM 25, so 25 it is (and not "latest").
+      - name: Set up GraalVM 25
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the native executable
+        shell: bash
+        run: ./gradlew nativeCompile -PjavaVersion=25 --stacktrace
+
+      - name: Smoke-test the executable
+        shell: bash
+        run: scripts/smoke-test.sh "${{ matrix.binary }}"
+
+      - name: Name the file after its system and add a checksum
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp "${{ matrix.binary }}" "dist/${{ matrix.asset }}"
+          python -c "import hashlib,sys; p=sys.argv[1]; print(hashlib.sha256(open(p,'rb').read()).hexdigest()+'  '+p.split('/')[-1])" "dist/${{ matrix.asset }}" > "dist/${{ matrix.asset }}.sha256"
+          ls -l dist
+
+      - name: Attach to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/${{ matrix.asset }}
+            dist/${{ matrix.asset }}.sha256
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
