@@ -56,3 +56,14 @@ tasks.register('jsTest', Exec) {
     description = 'Runs the JavaScript tests in src/test/js with node --test.'
     commandLine 'sh', '-c', 'if command -v node >/dev/null 2>&1; then node --test src/test/js/*.test.js; else echo "Node.js not found: JavaScript tests skipped"; fi'
 }
+
+// Native executable (experiment): options for `./gradlew nativeCompile`.
+graalvmNative {
+    binaries {
+        main {
+            // Apache POI (the Excel export and import) asks for the Windows-1252 character set, which a native image leaves out unless told to
+            // include them all.
+            buildArgs.add('-H:+AddAllCharsets')
+        }
+    }
+}

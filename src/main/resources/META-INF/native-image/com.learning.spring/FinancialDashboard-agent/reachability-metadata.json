@@ -942,13 +942,6 @@
         {
           "name": "<init>",
           "parameterTypes": []
-        },
-        {
-          "name": "invalid",
-          "parameterTypes": [
-            "com.learning.spring.financialdashboard.exception.ValidationException",
-            "jakarta.servlet.http.HttpServletRequest"
-          ]
         }
       ]
     },
