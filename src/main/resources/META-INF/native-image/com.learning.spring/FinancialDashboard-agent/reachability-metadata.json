@@ -895,6 +895,12 @@
           ]
         },
         {
+          "name": "create",
+          "parameterTypes": [
+            "com.learning.spring.financialdashboard.service.TransactionService$TransactionData"
+          ]
+        },
+        {
           "name": "list",
           "parameterTypes": []
         },
@@ -936,6 +942,13 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        },
+        {
+          "name": "invalid",
+          "parameterTypes": [
+            "com.learning.spring.financialdashboard.exception.ValidationException",
+            "jakarta.servlet.http.HttpServletRequest"
+          ]
         }
       ]
     },
@@ -1886,12 +1899,142 @@
       "type": "com.learning.spring.financialdashboard.model.Transaction",
       "fields": [
         {
+          "name": "amount"
+        },
+        {
+          "name": "borrowerId"
+        },
+        {
+          "name": "categoryId"
+        },
+        {
+          "name": "createdAt"
+        },
+        {
+          "name": "date"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "fee"
+        },
+        {
+          "name": "fromAccountId"
+        },
+        {
+          "name": "holdingId"
+        },
+        {
           "name": "id"
+        },
+        {
+          "name": "kind"
+        },
+        {
+          "name": "note"
+        },
+        {
+          "name": "ownShare"
+        },
+        {
+          "name": "paidByBorrowerId"
+        },
+        {
+          "name": "recurringDepositId"
+        },
+        {
+          "name": "splits"
+        },
+        {
+          "name": "tags"
+        },
+        {
+          "name": "toAccountId"
+        },
+        {
+          "name": "toAmount"
         }
       ],
       "methods": [
         {
           "name": "<init>",
+          "parameterTypes": []
+        },
+        {
+          "name": "getAmount",
+          "parameterTypes": []
+        },
+        {
+          "name": "getBorrowerId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getCategoryId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getCreatedAt",
+          "parameterTypes": []
+        },
+        {
+          "name": "getDate",
+          "parameterTypes": []
+        },
+        {
+          "name": "getDescription",
+          "parameterTypes": []
+        },
+        {
+          "name": "getFee",
+          "parameterTypes": []
+        },
+        {
+          "name": "getFromAccountId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getHoldingId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getKind",
+          "parameterTypes": []
+        },
+        {
+          "name": "getNote",
+          "parameterTypes": []
+        },
+        {
+          "name": "getOwnShare",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPaidByBorrowerId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getRecurringDepositId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getSplits",
+          "parameterTypes": []
+        },
+        {
+          "name": "getTags",
+          "parameterTypes": []
+        },
+        {
+          "name": "getToAccountId",
+          "parameterTypes": []
+        },
+        {
+          "name": "getToAmount",
           "parameterTypes": []
         }
       ]
@@ -2161,6 +2304,14 @@
           "parameterTypes": [
             "com.learning.spring.financialdashboard.repository.AccountRepository",
             "com.learning.spring.financialdashboard.repository.TransactionRepository"
+          ]
+        },
+        {
+          "name": "requireFunds",
+          "parameterTypes": [
+            "java.lang.Long",
+            "java.math.BigDecimal",
+            "java.math.BigDecimal"
           ]
         }
       ]
@@ -3363,6 +3514,24 @@
           "parameterTypes": [
             "java.lang.String"
           ]
+        },
+        {
+          "name": "isBalanceAdjustment",
+          "parameterTypes": [
+            "java.lang.Long"
+          ]
+        },
+        {
+          "name": "isLiabilityPayment",
+          "parameterTypes": [
+            "java.lang.Long"
+          ]
+        },
+        {
+          "name": "isLoanCategory",
+          "parameterTypes": [
+            "java.lang.Long"
+          ]
         }
       ]
     },
@@ -3399,6 +3568,12 @@
           ]
         },
         {
+          "name": "create",
+          "parameterTypes": [
+            "com.learning.spring.financialdashboard.service.TransactionService$TransactionData"
+          ]
+        },
+        {
           "name": "list",
           "parameterTypes": []
         },
@@ -3424,7 +3599,29 @@
       ]
     },
     {
-      "type": "com.learning.spring.financialdashboard.service.TransactionService$TransactionData"
+      "type": "com.learning.spring.financialdashboard.service.TransactionService$TransactionData",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.time.LocalDate",
+            "com.learning.spring.financialdashboard.model.TransactionKind",
+            "java.lang.Long",
+            "java.lang.Long",
+            "java.math.BigDecimal",
+            "java.math.BigDecimal",
+            "java.lang.Long",
+            "java.lang.String",
+            "java.lang.String",
+            "java.lang.Long",
+            "java.util.List",
+            "java.math.BigDecimal",
+            "java.util.Map",
+            "java.lang.Long",
+            "java.math.BigDecimal"
+          ]
+        }
+      ]
     },
     {
       "type": "com.learning.spring.financialdashboard.service.TransactionTagService",
@@ -7782,9 +7979,6 @@
       "type": "org.hibernate.bytecode.enhance.internal.bytebuddy.CodeTemplates$TrackChange"
     },
     {
-      "type": "org.hibernate.bytecode.internal.bytebuddy.BytecodeProviderImpl"
-    },
-    {
       "type": "org.hibernate.bytecode.spi.ReflectionOptimizer$AccessOptimizer"
     },
     {
@@ -9010,6 +9204,28 @@
       ]
     },
     {
+      "type": "org.openxmlformats.schemas.drawingml.x2006.chart.impl.CTPieChartImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.xmlbeans.SchemaType"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.openxmlformats.schemas.drawingml.x2006.chart.impl.CTPieSerImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.xmlbeans.SchemaType"
+          ]
+        }
+      ]
+    },
+    {
       "type": "org.openxmlformats.schemas.drawingml.x2006.chart.impl.CTPlotAreaImpl",
       "methods": [
         {
@@ -9770,6 +9986,17 @@
       ]
     },
     {
+      "type": "org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTAutoFilterImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.xmlbeans.SchemaType"
+          ]
+        }
+      ]
+    },
+    {
       "type": "org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTBookViewImpl",
       "methods": [
         {
@@ -9892,6 +10119,28 @@
     },
     {
       "type": "org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTColsImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.xmlbeans.SchemaType"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTDefinedNameImpl",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.xmlbeans.SchemaType"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.openxmlformats.schemas.spreadsheetml.x2006.main.impl.CTDefinedNamesImpl",
       "methods": [
         {
           "name": "<init>",
@@ -13495,15 +13744,7 @@
       "type": "org.springframework.boot.webmvc.autoconfigure.error.AbstractErrorController"
     },
     {
-      "type": "org.springframework.boot.webmvc.autoconfigure.error.BasicErrorController",
-      "methods": [
-        {
-          "name": "error",
-          "parameterTypes": [
-            "jakarta.servlet.http.HttpServletRequest"
-          ]
-        }
-      ]
+      "type": "org.springframework.boot.webmvc.autoconfigure.error.BasicErrorController"
     },
     {
       "type": "org.springframework.boot.webmvc.autoconfigure.error.DefaultErrorViewResolver"
@@ -16712,9 +16953,6 @@
       "glob": "META-INF/services/org.hibernate.boot.spi.SessionFactoryBuilderFactory"
     },
     {
-      "glob": "META-INF/services/org.hibernate.bytecode.spi.BytecodeProvider"
-    },
-    {
       "glob": "META-INF/services/org.hibernate.engine.extension.spi.ExtensionIntegration"
     },
     {
@@ -17690,6 +17928,9 @@
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctanchorclientdata02betype.xsb"
     },
     {
+      "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctautofiltera8d0type.xsb"
+    },
+    {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctaxdatasource1440type.xsb"
     },
     {
@@ -17760,6 +18001,12 @@
     },
     {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctcrossesbcb8type.xsb"
+    },
+    {
+      "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctdefinedname9413type.xsb"
+    },
+    {
+      "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctdefinednamesce48type.xsb"
     },
     {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctdrawing2748type.xsb"
@@ -17877,6 +18124,12 @@
     },
     {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctpatternfill7452type.xsb"
+    },
+    {
+      "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctpiechartd34atype.xsb"
+    },
+    {
+      "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctpieser5248type.xsb"
     },
     {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/ctplotarea106etype.xsb"
@@ -18147,6 +18400,12 @@
     },
     {
       "glob": "org/apache/poi/schemas/ooxml/system/ooxml/worksheetf539doctype.xsb"
+    },
+    {
+      "glob": "org/apache/poi/ss/formula/function/functionMetadata.txt"
+    },
+    {
+      "glob": "org/apache/poi/ss/formula/function/functionMetadataCetab.txt"
     },
     {
       "glob": "org/apache/tomcat/jni/AprStatus.class"

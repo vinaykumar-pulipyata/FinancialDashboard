@@ -57,7 +57,8 @@ smoke_checks() {
     checkok "list accounts (database, JPA)" "$(code "${AUTH[@]}" "$URL/api/accounts")"
     acc="$(curl -s "${AUTH[@]}" "${H[@]}" -X POST "$URL/api/accounts" -d '{"name":"Bank","type":"BANK","openingBalance":1000}' | json "['id']")"
     check "create an account (write to the database)" "yes" "$([ -n "$acc" ] && echo yes)"
-    cat="$(curl -s "${AUTH[@]}" "$URL/api/categories?kind=EXPENSE" | json "[0]['id']")"
+    # an ordinary top-level category (not one of the built-in fixed ones such as Balance Adjustment, which the app refuses)
+    cat="$(curl -s "${AUTH[@]}" "$URL/api/categories?kind=EXPENSE" | python3 -c "import sys,json; print(next(c['id'] for c in json.load(sys.stdin) if not c.get('systemKey') and c.get('parentId') is None))" 2>/dev/null)"
     check "categories" "yes" "$([ -n "$cat" ] && echo yes)"
     # The bodies are built here, outside the $( ) of the checks: macOS's old bash (3.2) splits an escaped-quote JSON at its commas inside $( ).
     body_expense="{\"date\":\"2026-01-05\",\"kind\":\"EXPENSE\",\"fromAccountId\":$acc,\"amount\":250,\"categoryId\":$cat,\"note\":\"Dinner with friends\"}"
@@ -115,6 +116,16 @@ if [ "$MODE" = "--agent" ]; then
     smoke_checks
     stop_app
     sleep 2
+    # Hibernate 7.4 picks its byte-code provider only through the Java service lookup. A native image must not see the ByteBuddy one (it
+    # makes classes at run time), so what the recording saw of it is taken out again.
+    python3 - "$AGENT_OUT/reachability-metadata.json" <<'PY'
+import json, sys
+p = sys.argv[1]
+d = json.load(open(p))
+d["resources"] = [r for r in d.get("resources", []) if "org.hibernate.bytecode.spi.BytecodeProvider" not in json.dumps(r)]
+d["reflection"] = [r for r in d.get("reflection", []) if "org.hibernate.bytecode.internal.bytebuddy." not in json.dumps(r.get("type", ""))]
+json.dump(d, open(p, "w"), indent=2)
+PY
     echo; echo "Recorded: $(ls "$AGENT_OUT" | tr '\n' ' ')"
     report
     echo "Now build the native executable with: scripts/native-experiment.sh --rebuild"
