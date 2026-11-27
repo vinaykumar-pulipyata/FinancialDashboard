@@ -39,16 +39,8 @@ if [ "$MODE" = "--agent" ]; then
     "$SMOKE" "$GRAAL/bin/java" -agentlib:native-image-agent=config-output-dir="$AGENT_OUT" -jar "$JAR"
     status=$?
     sleep 2
-    # Hibernate 7.4 picks its byte-code provider only through the Java service lookup. A native image must not see the ByteBuddy one (it
-    # makes classes at run time), so what the recording saw of it is taken out again.
-    python3 - "$AGENT_OUT/reachability-metadata.json" <<'PY'
-import json, sys
-p = sys.argv[1]
-d = json.load(open(p))
-d["resources"] = [r for r in d.get("resources", []) if "org.hibernate.bytecode.spi.BytecodeProvider" not in json.dumps(r)]
-d["reflection"] = [r for r in d.get("reflection", []) if "org.hibernate.bytecode.internal.bytebuddy." not in json.dumps(r.get("type", ""))]
-json.dump(d, open(p, "w"), indent=2)
-PY
+    # drop what Spring's own native support already covers and the ByteBuddy provider (see the script's header)
+    python3 "$ROOT/scripts/trim-native-metadata.py" "$AGENT_OUT/reachability-metadata.json"
     echo; echo "Recorded: $(ls "$AGENT_OUT" | tr '\n' ' ')"
     echo "Now build the native executable with: scripts/native-experiment.sh --rebuild"
     exit $status
