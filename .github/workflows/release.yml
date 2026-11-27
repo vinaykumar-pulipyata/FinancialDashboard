@@ -79,13 +79,25 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # If a step fails, its error lines are also written as annotations (shown on the run page and readable through the API), because the
+      # full log is awkward to get at from the command line.
       - name: Build the native executable
         shell: bash
-        run: ./gradlew nativeCompile -PjavaVersion=25 --stacktrace
+        run: |
+          set -o pipefail
+          ./gradlew nativeCompile -PjavaVersion=25 --stacktrace 2>&1 | tee build.log || {
+            grep -n -i -m 12 "error\|exception\|caused by\|failed\|different root" build.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
+            exit 1
+          }
 
       - name: Smoke-test the executable
         shell: bash
-        run: scripts/smoke-test.sh "${{ matrix.binary }}"
+        run: |
+          set -o pipefail
+          scripts/smoke-test.sh "${{ matrix.binary }}" 2>&1 | tee smoke.log || {
+            grep -n -i -m 15 "FAIL\|error\|exception\|stopped\|reply" smoke.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
+            exit 1
+          }
 
       - name: Name the file after its system and add a checksum
         shell: bash

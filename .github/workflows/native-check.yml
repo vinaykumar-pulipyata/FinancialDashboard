@@ -1,0 +1,68 @@
+# Builds and smoke-tests the native executable on ONE system, on demand, without running the tests and without publishing anything.
+# For trying a fix on Windows, macOS or Linux in a few minutes instead of running the whole release:
+#   gh workflow run native-check.yml -f os=windows-latest        (also: macos-15, ubuntu-latest, ubuntu-24.04-arm)
+# If it fails, the error lines are written as annotations on the run.
+name: Native check
+
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: The system to build on
+        type: choice
+        default: windows-latest
+        options:
+          - windows-latest
+          - macos-15
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: Native build on ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Keep Gradle's files on the same drive (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "GRADLE_USER_HOME=${GITHUB_WORKSPACE}\\.gradle-home" >> "$GITHUB_ENV"
+
+      - name: Set up GraalVM 25
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the native executable
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew nativeCompile -PjavaVersion=25 --stacktrace 2>&1 | tee build.log || {
+            grep -n -i -m 12 "error\|exception\|caused by\|failed\|different root" build.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
+            exit 1
+          }
+
+      - name: Smoke-test the executable
+        shell: bash
+        run: |
+          set -o pipefail
+          bin=build/native/nativeCompile/FinancialDashboard
+          [ -f "$bin.exe" ] && bin="$bin.exe"
+          ls -l "$bin"
+          scripts/smoke-test.sh "$bin" 2>&1 | tee smoke.log || {
+            grep -n -i -m 15 "FAIL\|error\|exception\|stopped\|reply" smoke.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
+            exit 1
+          }
