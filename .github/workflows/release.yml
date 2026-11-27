@@ -57,6 +57,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Windows only: the checkout is on the D: drive but Gradle keeps its downloaded libraries under the user folder on C:. The GraalVM Gradle
+      # plugin writes every path relative to the project and fails with "'other' has different root" across two drives, so Gradle's home goes
+      # inside the workspace as well. (This must come before the Gradle set-up so its cache uses the same folder.)
+      - name: Keep Gradle's files on the same drive (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "GRADLE_USER_HOME=${GITHUB_WORKSPACE}\\.gradle-home" >> "$GITHUB_ENV"
+
       # Spring Boot 4 writes its native-image metadata in the format of GraalVM 25, so 25 it is (and not "latest").
       - name: Set up GraalVM 25
         uses: graalvm/setup-graalvm@v1
