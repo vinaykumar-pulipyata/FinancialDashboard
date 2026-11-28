@@ -50,5 +50,21 @@ HOME="$H" sh "$SCRIPT" --uninstall >/dev/null 2>&1
 [ ! -e "$D/financial-dashboard-app" ] && [ ! -e "$H/.local/bin/financial-dashboard" ] && ok "uninstall removes the program and the command" || bad "uninstall left files"
 check "uninstall keeps the data" "my data" "$(cat "$D/data/financialdb.mv.db")"
 
+
+# ---- uninstall --purge: asks first, refuses without a terminal, deletes only the data
+HOME="$H" sh "$SCRIPT" >/dev/null 2>&1            # install again (the data is still there)
+mkdir -p "$D/backups" "$D/logs"; echo b > "$D/backups/b.zip"; echo l > "$D/logs/l.log"
+HOME="$H" sh "$SCRIPT" --purge >/dev/null 2>&1; rc=$?
+[ $rc -ne 0 ] && ok "--purge without --uninstall is refused" || bad "--purge alone was accepted"
+HOME="$H" sh "$SCRIPT" --uninstall --purge --dry-run >/dev/null 2>&1
+check "a dry-run purge deletes nothing" "my data" "$(cat "$D/data/financialdb.mv.db" 2>/dev/null)"
+HOME="$H" FINANCIAL_DASHBOARD_NO_TTY=1 sh "$SCRIPT" --uninstall --purge </dev/null >/dev/null 2>&1; rc=$?     # pretend there is no terminal to ask on
+[ $rc -ne 0 ] && [ $rc -ne 127 ] && ok "a purge with no terminal and no --yes is refused (exit $rc)" || bad "the purge without a terminal did not fail properly (exit $rc)"
+if [ "$(cat "$D/data/financialdb.mv.db" 2>/dev/null)" = "my data" ]; then ok "and the data is still there"; else bad "the data was deleted without asking"; fi
+HOME="$H" sh "$SCRIPT" --uninstall --purge --yes >/dev/null 2>&1
+[ ! -e "$D/data" ] && [ ! -e "$D/backups" ] && [ ! -e "$D/logs" ] && ok "--purge --yes deletes data, backups and logs" || bad "data is still there after --purge --yes"
+[ ! -e "$D/financial-dashboard-app" ] && ok "and the program is gone too" || bad "the program is still there"
+[ -f "$D/app.jar" ] && ok "an older install's app.jar is not touched" || bad "app.jar was deleted"
+
 echo; [ $fails -eq 0 ] && echo "ALL CHECKS PASSED" || echo "$fails CHECK(S) FAILED"
 exit $fails

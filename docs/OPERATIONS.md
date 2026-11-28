@@ -109,9 +109,36 @@ Piping a script into `sh` runs whatever it says, so read it first if you like: `
   | `~/.local/bin/financial-dashboard` | a link to the launcher (if `~/.local/bin` is not on your PATH it says so and prints the line to add) |
 
   An earlier Java-based install in the same folder (`app.jar`) is left alone; its old launcher is saved as `financial-dashboard.previous`, and the data is shared. Running the script again is an upgrade.
-- **Options** (after `sh -s --`): `--version v0.1.0-rc1` installs that release, `--dir DIR` uses another folder, `--dry-run` only says what it would do, `--uninstall` removes the program and the command (the data stays). The same through the environment: `FINANCIAL_DASHBOARD_VERSION`, `FINANCIAL_DASHBOARD_HOME`, `FINANCIAL_DASHBOARD_BIN_DIR`. Example: `curl -fsSL <address> | sh -s -- --version v0.1.0-rc1`.
+- **Options** (after `sh -s --`): `--version v0.1.0-rc1` installs that release, `--dir DIR` uses another folder, `--dry-run` only says what it would do, `--uninstall` removes the program and the command (the data stays; `--purge` deletes it too, after asking: see [Uninstalling](#uninstalling)). The same through the environment: `FINANCIAL_DASHBOARD_VERSION`, `FINANCIAL_DASHBOARD_HOME`, `FINANCIAL_DASHBOARD_BIN_DIR`. Example: `curl -fsSL <address> | sh -s -- --version v0.1.0-rc1`.
 - **Windows:** `irm https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.ps1 | iex` installs into `%LOCALAPPDATA%\FinancialDashboard` (the executable, a `financial-dashboard.cmd` launcher and, later, `data\`) and adds that folder to your user PATH; open a new window and run `financial-dashboard`. Options are environment variables (`FINANCIAL_DASHBOARD_VERSION`, `FINANCIAL_DASHBOARD_HOME`, `FINANCIAL_DASHBOARD_DRY_RUN=1`, `FINANCIAL_DASHBOARD_UNINSTALL=1`). The PowerShell script has not been run on Windows yet.
 - **Tested:** `scripts/test-install.sh` (run by CI) installs a fake release into a temporary home: the install, an upgrade over an older install with data in it, a wrong checksum and the uninstall. The installer has not been used against a real release yet.
+
+## Uninstalling
+
+macOS and Linux:
+
+```
+curl -fsSL https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.sh | sh -s -- --uninstall
+```
+
+| Command | What it removes |
+|---|---|
+| `... \| sh -s -- --uninstall` | the program, the launcher and the `~/.local/bin/financial-dashboard` link. **Your data stays** in `~/.financial-dashboard` (`data/`, `backups/`, `logs/`), so installing again picks up where you left off. |
+| `... \| sh -s -- --uninstall --purge` | the same, **and your data** (`data/`, `backups/`, `logs/`, and the saved `financial-dashboard.previous` launcher). It lists what it will delete with the sizes and asks you to type `delete`; anything else keeps the data. If there is no terminal to ask on, it refuses and deletes nothing. |
+| `... \| sh -s -- --uninstall --purge --yes` | the same without asking, for scripts. There is no way back. |
+
+`--dry-run` with any of them only lists what would be removed. A folder left over from an older Java-based install (`app.jar`) is not touched; the script says what is left.
+
+**Windows** (PowerShell; set the variables, then run the installer again):
+
+```
+$env:FINANCIAL_DASHBOARD_UNINSTALL = "1"
+irm https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.ps1 | iex
+```
+
+This removes the program and the `financial-dashboard` command and takes the folder off your user PATH; your data stays. Add `$env:FINANCIAL_DASHBOARD_PURGE = "1"` to delete the data as well (it asks you to type `delete`; `FINANCIAL_DASHBOARD_YES = "1"` skips the question). The Windows script has not been run on Windows yet.
+
+Without the scripts: delete the folder you started the program in (it holds the program and, next to it, `data/`, `backups/` and `logs/`), and on Windows take that folder off your PATH. If you made a **backup copy** somewhere else (the second backup folder in the dashboard), the uninstall does not touch it.
 
 ## Running the downloaded executable
 

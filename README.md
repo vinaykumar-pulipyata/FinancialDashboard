@@ -12,7 +12,7 @@ Built with Spring Boot 4.1.1 (Java 17), JPA on a file-based H2 database with Fly
 curl -fsSL https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.sh | sh
 ```
 
-On Windows, in PowerShell: `irm https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.ps1 | iex`. Details and options: [Installing with one command](docs/OPERATIONS.md#installing-with-one-command).
+On Windows, in PowerShell: `irm https://raw.githubusercontent.com/vinaykumar-pulipyata/FinancialDashboard/main/scripts/install.ps1 | iex`. Details and options: [Installing with one command](docs/OPERATIONS.md#installing-with-one-command). To remove it again (your data stays unless you ask): [Uninstalling](docs/OPERATIONS.md#uninstalling).
 
 Or download by hand: each release on the [Releases page](https://github.com/vinaykumar-pulipyata/FinancialDashboard/releases) has a self-contained executable for **Linux (x64 and arm64), macOS (Apple silicon) and Windows (x64)**, each with a `.sha256` checksum file. There is no build for Intel Macs. Put the file in a folder of its own (it keeps `data/`, `backups/` and `logs/` next to where you start it) and run it, then open `http://localhost:8080/`. How to open it on each system, and checking the download: [Running the downloaded executable](docs/OPERATIONS.md#running-the-downloaded-executable). The first release (`v0.1.0`) has not been published yet.
 

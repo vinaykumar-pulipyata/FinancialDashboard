@@ -8,7 +8,9 @@
 #   ... | sh -s -- --version v0.1.0-rc1     install that release (a pre-release is only installed when named)
 #   ... | sh -s -- --dir "$HOME/finance"     install and keep the data somewhere else (default ~/.financial-dashboard)
 #   ... | sh -s -- --dry-run                 only say what would happen
-#   ... | sh -s -- --uninstall               remove the program and the command (the data folders are kept)
+#   ... | sh -s -- --uninstall               remove the program and the command (your data is kept)
+#   ... | sh -s -- --uninstall --purge       also delete your data (data/, backups/, logs/); asks you to type "delete" first
+#   ... | sh -s -- --uninstall --purge --yes   the same without asking (for scripts: there is no way back)
 #
 # Where things go (nothing outside these is touched):
 #   ~/.financial-dashboard/financial-dashboard-app   the executable
@@ -24,6 +26,8 @@ BIN_DIR="${FINANCIAL_DASHBOARD_BIN_DIR:-$HOME/.local/bin}"
 BASE_URL="${FINANCIAL_DASHBOARD_BASE_URL:-}"      # for tests: a folder or address that holds the files
 DRY_RUN=0
 UNINSTALL=0
+PURGE=0
+YES=0
 
 say() { printf '%s\n' "$*"; }
 fail() { printf 'Error: %s\n' "$*" >&2; exit 1; }
@@ -34,10 +38,15 @@ while [ $# -gt 0 ]; do
         --dir) [ $# -ge 2 ] || fail "--dir needs a folder"; HOME_DIR="$2"; shift 2 ;;
         --dry-run) DRY_RUN=1; shift ;;
         --uninstall) UNINSTALL=1; shift ;;
-        -h|--help) sed -n '2,16p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//' || true; exit 0 ;;
+        --purge) PURGE=1; shift ;;
+        --yes) YES=1; shift ;;
+        -h|--help) sed -n '2,18p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//' || true; exit 0 ;;
         *) fail "Unknown option: $1 (try --help)" ;;
     esac
 done
+
+[ "$PURGE" = 0 ] || [ "$UNINSTALL" = 1 ] || fail "--purge only goes with --uninstall."
+[ "$YES" = 0 ] || [ "$PURGE" = 1 ] || fail "--yes only goes with --purge."
 
 # ---------------------------------------------------------------------------------------------- uninstall
 if [ "$UNINSTALL" = 1 ]; then
@@ -50,6 +59,34 @@ if [ "$UNINSTALL" = 1 ]; then
     link="$BIN_DIR/financial-dashboard"
     if [ -L "$link" ]; then
         if [ "$DRY_RUN" = 1 ]; then say "  would remove $link"; else rm -f "$link"; say "  removed $link"; fi
+    fi
+
+    if [ "$PURGE" = 1 ]; then
+        # Your data: the app keeps data/, backups/ and logs/ in its folder. This is the one thing the installer can destroy, so it asks.
+        targets=""
+        for d in data backups logs; do [ -e "$HOME_DIR/$d" ] && targets="$targets $HOME_DIR/$d"; done
+        [ -e "$HOME_DIR/financial-dashboard.previous" ] && targets="$targets $HOME_DIR/financial-dashboard.previous"
+        say ""
+        if [ -z "$targets" ]; then
+            say "No data to delete in $HOME_DIR."
+        else
+            say "--purge deletes your data. This cannot be undone:"
+            for t in $targets; do say "  $t  ($(du -sh "$t" 2>/dev/null | cut -f1))"; done
+            if [ "$DRY_RUN" = 1 ]; then
+                say "(dry run: nothing was deleted)"; exit 0
+            fi
+            if [ "$YES" = 1 ]; then
+                :
+            elif [ -z "${FINANCIAL_DASHBOARD_NO_TTY:-}" ] && ( : < /dev/tty ) 2>/dev/null; then   # (the variable lets the tests pretend there is no terminal)
+                printf 'Type "delete" to delete it, anything else keeps it: ' > /dev/tty
+                read -r answer < /dev/tty || answer=""
+                [ "$answer" = delete ] || { say "Kept. Nothing was deleted."; exit 0; }
+            else
+                fail "Cannot ask for confirmation here (there is no terminal). Nothing was deleted. Run it in a terminal, or add --yes if you are sure."
+            fi
+            for t in $targets; do rm -rf "$t"; say "  deleted $t"; done
+        fi
+        rmdir "$HOME_DIR" 2>/dev/null && say "  removed the empty folder $HOME_DIR" || say "Left in $HOME_DIR: $(ls -A "$HOME_DIR" 2>/dev/null | tr '\n' ' ')"
     fi
     exit 0
 fi

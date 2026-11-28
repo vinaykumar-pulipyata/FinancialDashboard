@@ -7,7 +7,9 @@
 #   $env:FINANCIAL_DASHBOARD_VERSION = "v0.1.0-rc1"      install that release (a pre-release is only installed when named)
 #   $env:FINANCIAL_DASHBOARD_HOME = "D:\finance"          where the program and your data go (default %LOCALAPPDATA%\FinancialDashboard)
 #   $env:FINANCIAL_DASHBOARD_DRY_RUN = "1"                only say what would happen
-#   $env:FINANCIAL_DASHBOARD_UNINSTALL = "1"              remove the program and the command (the data folders are kept)
+#   $env:FINANCIAL_DASHBOARD_UNINSTALL = "1"              remove the program and the command and take the folder off your PATH (your data is kept)
+#   $env:FINANCIAL_DASHBOARD_PURGE = "1"                  with UNINSTALL: also delete your data (data, backups, logs); asks you to type "delete" first
+#   $env:FINANCIAL_DASHBOARD_YES = "1"                    with PURGE: do not ask (for scripts: there is no way back)
 #
 # Where things go: the executable (financial-dashboard-app.exe), the launcher (financial-dashboard.cmd) and, once the app has run,
 # data\, backups\ and logs\ all sit in that one folder; the folder is added to your user PATH.
@@ -20,15 +22,52 @@ $Version = if ($env:FINANCIAL_DASHBOARD_VERSION) { $env:FINANCIAL_DASHBOARD_VERS
 $HomeDir = if ($env:FINANCIAL_DASHBOARD_HOME) { $env:FINANCIAL_DASHBOARD_HOME } else { Join-Path $env:LOCALAPPDATA 'FinancialDashboard' }
 $DryRun = $env:FINANCIAL_DASHBOARD_DRY_RUN -eq '1'
 $Uninstall = $env:FINANCIAL_DASHBOARD_UNINSTALL -eq '1'
+$Purge = $env:FINANCIAL_DASHBOARD_PURGE -eq '1'
+$Yes = $env:FINANCIAL_DASHBOARD_YES -eq '1'
 $BaseUrl = $env:FINANCIAL_DASHBOARD_BASE_URL          # for tests: a folder or address that holds the files
 
 function Fail($message) { Write-Host "Error: $message" -ForegroundColor Red; throw $message }
 
+if ($Purge -and -not $Uninstall) { Fail "FINANCIAL_DASHBOARD_PURGE only goes with FINANCIAL_DASHBOARD_UNINSTALL=1." }
+
 if ($Uninstall) {
-    Write-Host "Removing the program and the command. Your data (data, backups, logs in $HomeDir) is left alone."
+    if ($Purge) { Write-Host "Removing the program and the command, and deleting your data on request (see below)." }
+    else { Write-Host "Removing the program and the command. Your data (data, backups, logs in $HomeDir) is left alone." }
     foreach ($f in 'financial-dashboard-app.exe', 'financial-dashboard.cmd') {
         $p = Join-Path $HomeDir $f
         if (Test-Path $p) { if ($DryRun) { Write-Host "  would remove $p" } else { Remove-Item $p -Force; Write-Host "  removed $p" } }
+    }
+    # the installer put the folder on the user PATH: take it off again
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    if ($userPath -and (($userPath -split ';') -contains $HomeDir)) {
+        if ($DryRun) { Write-Host "  would take $HomeDir off your PATH" }
+        else {
+            [Environment]::SetEnvironmentVariable('Path', ((($userPath -split ';') | Where-Object { $_ -and $_ -ne $HomeDir }) -join ';'), 'User')
+            Write-Host "  took $HomeDir off your PATH"
+        }
+    }
+
+    if ($Purge) {
+        # Your data is the one thing this script can destroy, so it asks first.
+        $targets = @('data', 'backups', 'logs') | ForEach-Object { Join-Path $HomeDir $_ } | Where-Object { Test-Path $_ }
+        Write-Host ""
+        if (-not $targets) { Write-Host "No data to delete in $HomeDir." }
+        else {
+            Write-Host "Purge deletes your data. This cannot be undone:"
+            foreach ($t in $targets) {
+                $size = [math]::Round(((Get-ChildItem $t -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum / 1MB), 1)
+                Write-Host "  $t  ($size MB)"
+            }
+            if ($DryRun) { Write-Host "(dry run: nothing was deleted)"; return }
+            if (-not $Yes) {
+                if (-not [Environment]::UserInteractive) { Fail "Cannot ask for confirmation here (no interactive window). Nothing was deleted. Run it in PowerShell, or set FINANCIAL_DASHBOARD_YES=1 if you are sure." }
+                $answer = Read-Host 'Type "delete" to delete it, anything else keeps it'
+                if ($answer -ne 'delete') { Write-Host "Kept. Nothing was deleted."; return }
+            }
+            foreach ($t in $targets) { Remove-Item $t -Recurse -Force; Write-Host "  deleted $t" }
+        }
+        if ((Test-Path $HomeDir) -and -not (Get-ChildItem $HomeDir -Force)) { Remove-Item $HomeDir -Force; Write-Host "  removed the empty folder $HomeDir" }
+        elseif (Test-Path $HomeDir) { Write-Host "Left in $HomeDir : $((Get-ChildItem $HomeDir -Force | ForEach-Object Name) -join ' ')" }
     }
     return
 }
