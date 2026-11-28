@@ -79,7 +79,7 @@ Two GitHub Actions workflows in `.github/workflows/`:
 
 | Workflow | When | What it does |
 |---|---|---|
-| `ci.yml` (CI) | every push and pull request | one Linux job: sets up Java 17, Node 20 and Python 3, runs `./gradlew build` (Java tests, then the JavaScript tests, then the jar), keeps the test reports and the jar for 14 days. A newer push to the same branch cancels the older run. |
+| `ci.yml` (CI) | every push and pull request | one Linux job: sets up Java 17, Node 24 and Python 3, runs `./gradlew build` (Java tests, then the JavaScript tests, then the jar), keeps the test reports and the jar for 14 days. A newer push to the same branch cancels the older run. |
 | `release.yml` (Release) | a pushed tag starting with `v` | first the same tests in one job (`verify`); then four jobs in parallel build the native executable with GraalVM 25 and run the smoke test on it: `ubuntu-latest` (Linux x64), `ubuntu-24.04-arm` (Linux arm64), `macos-15` (Apple silicon; no Intel Mac) and `windows-latest`. Each attaches `financial-dashboard-<system>` and a `.sha256` file to a GitHub Release (generated release notes; a tag with a hyphen such as `v0.1.0-rc1` is a pre-release). One system failing does not stop the others. |
 
 To release: set `version` in **`gradle.properties`** (the one place for the version; Gradle uses it as the project version and in the jar name), commit and push, then `git tag v0.1.0 && git push origin v0.1.0`. The workflow's first job refuses a tag whose number differs from the file (`v0.1.0-rc3` is for version `0.1.0`). Try a pre-release tag (`v0.1.0-rc1`) first.
