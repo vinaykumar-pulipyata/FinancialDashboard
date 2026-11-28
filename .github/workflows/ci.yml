@@ -52,6 +52,7 @@ jobs:
           node --version
           python --version
           ./gradlew --version
+          echo "::notice::project version is $(./gradlew properties -q | sed -n 's/^version: //p')"
 
       - name: Build and test
         run: ./gradlew build --stacktrace
