@@ -84,6 +84,8 @@ Two GitHub Actions workflows in `.github/workflows/`:
 
 To release: set `version` in `build.gradle`, commit, then `git tag v0.1.0 && git push origin v0.1.0`. Try a pre-release tag (`v0.1.0-rc1`) first.
 
+**macOS is added by hand.** GitHub's Apple-silicon runner has only 7 GB of memory and 3 cores, and the native build (analysis phase) needs more than the 5.7 GB GraalVM may use there: it thrashes and is aborted after about 35 minutes (seen on every try, with and without trimming the recorded metadata). So the workflow's macOS job is expected to fail, and the Mac file is built on an Apple-silicon Mac and attached to the same release with `scripts/upload-macos-release.sh v0.1.0` (it builds, runs the smoke test, adds the checksum and uploads). Linux x64, Linux arm64 and Windows come from the workflow. If a bigger macOS runner becomes available, add `-J-Xmx` settings with `-PnativeExtraArgs` (`native-check.yml` has an input for them) and let the workflow build it again.
+
 ## The native executable (GraalVM)
 
 The release files are GraalVM native images of the Spring Boot app (about 190 MB, start in about 4 seconds, no Java needed). A native image can only be built on the system it is for, which is why the release workflow has a job per system.
