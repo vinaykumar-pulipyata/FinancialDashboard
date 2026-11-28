@@ -18,6 +18,20 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+
+      # The version lives in gradle.properties. A tag v0.2.0 or v0.2.0-rc1 must be for the version in that file (0.2.0), so a release is never
+      # made from a commit that still says another version.
+      - name: Check the tag matches the version in gradle.properties
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          tag="${tag%%-*}"
+          version="$(sed -n 's/^version *= *//p' gradle.properties | tr -d '[:space:]')"
+          echo "tag $GITHUB_REF_NAME -> $tag ; gradle.properties version -> $version"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::The tag $GITHUB_REF_NAME is for version $tag but gradle.properties says $version. Change gradle.properties, commit, and tag again."
+            exit 1
+          fi
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
