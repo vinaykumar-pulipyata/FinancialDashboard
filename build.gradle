@@ -64,6 +64,12 @@ graalvmNative {
             // Apache POI (the Excel export and import) asks for the Windows-1252 character set, which a native image leaves out unless told to
             // include them all.
             buildArgs.add('-H:+AddAllCharsets')
+            // Extra options for one build, from the command line (used by the workflows to tune a small runner):
+            //   ./gradlew nativeCompile -PnativeExtraArgs="-J-Xmx6500m -H:DeadlockWatchdogInterval=0"
+            def extra = findProperty('nativeExtraArgs')
+            if (extra) {
+                extra.toString().trim().split(/\s+/).each { buildArgs.add(it) }
+            }
         }
     }
 }

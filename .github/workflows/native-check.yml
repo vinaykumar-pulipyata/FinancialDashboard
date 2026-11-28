@@ -16,6 +16,10 @@ on:
           - macos-15
           - ubuntu-latest
           - ubuntu-24.04-arm
+      native_args:
+        description: Extra GraalVM options for this build (for example -J-Xmx6500m -H:DeadlockWatchdogInterval=0)
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -56,7 +60,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          ./gradlew nativeCompile -PjavaVersion=25 --stacktrace 2>&1 | tee build.log || {
+          ./gradlew nativeCompile -PjavaVersion=25 "-PnativeExtraArgs=${{ inputs.native_args }}" --stacktrace 2>&1 | tee build.log || {
             grep -n -i -m 12 "error\|exception\|caused by\|failed\|different root" build.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
             exit 1
           }
