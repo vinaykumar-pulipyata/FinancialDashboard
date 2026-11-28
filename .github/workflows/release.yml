@@ -50,7 +50,7 @@ jobs:
     name: ${{ matrix.asset }}
     needs: verify
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
+    timeout-minutes: 100       # the macOS build alone takes about 50 minutes (see the matrix)
     strategy:
       fail-fast: false       # one system failing should not sink the others
       matrix:
@@ -64,6 +64,9 @@ jobs:
           - os: macos-15              # Apple silicon; the Intel macOS runners are left out on purpose
             asset: financial-dashboard-macos-arm64
             binary: build/native/nativeCompile/FinancialDashboard
+            # This runner has 7 GB and 3 cores. With GraalVM's default limit (5.7 GB) the analysis runs out of memory and is aborted after
+            # about 35 minutes; with 6.5 GB and the watchdog off it finishes (tried on 2026-11-28: build and smoke test passed, about 50 minutes).
+            extra: "-J-Xmx6500m -H:DeadlockWatchdogInterval=0"
           - os: windows-latest
             asset: financial-dashboard-windows-x64.exe
             binary: build/native/nativeCompile/FinancialDashboard.exe
@@ -102,7 +105,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          ./gradlew nativeCompile -PjavaVersion=25 --stacktrace 2>&1 | tee build.log || {
+          ./gradlew nativeCompile -PjavaVersion=25 "-PnativeExtraArgs=${{ matrix.extra }}" --stacktrace 2>&1 | tee build.log || {
             grep -n -i -m 12 "error\|exception\|caused by\|failed\|different root" build.log | while IFS= read -r line; do echo "::error::${line:0:900}"; done
             exit 1
           }
